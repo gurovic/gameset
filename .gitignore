@@ -1,2 +1,5 @@
-gameset/project
 gameset/target
+*/.metals/
+*/.bloop/
+*/.ammonite/
+*/metals.sbt
