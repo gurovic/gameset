@@ -700,7 +700,7 @@ int main()
 
     int player = 1;
     Table_init();
-    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+    //std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
     int res = negamax(GameBoard, player, depth, numeric_limits<int>::min() + 1, numeric_limits<int>::max() - 1, hash_board(GameBoard) - 1, Get_restrictions(GameBoard), 0, 0);
     cout << res << endl;
@@ -708,15 +708,14 @@ int main()
     Cache_mtdf.clear();
     StateCache_mtdf.clear();
     cout << "Best Move:" << bestMove_mtdf.i << " " << bestMove_mtdf.j << endl;
-    cout << "Score: " << bestMove_mtdf.score << endl;
-    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
+    /*std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    td::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
     cout << "fc: " << fc << endl;
     cout << "CacheHits: " << CacheHits_mtdf << endl;
     cout << "CacheCutoffs: " << CacheCutoffs_mtdf << endl;
     cout << "CachePuts: " << CachePuts_mtdf << endl;
     cout << "StateCacheHits: " << StateCacheHits_mtdf << endl;
-    cout << "StateCachePuts: " << StateCachePuts_mtdf << endl;
+    cout << "StateCachePuts: " << StateCachePuts_mtdf << endl;*/
     for (auto & i : GameBoard) {
         for (int j : i) {
             cout << j << ' ';
