@@ -642,16 +642,15 @@ int main()
     MaximumDepth = 6;
     int depth = 6;
 
-    int player = 1;
+    int player = -1;
     Table_init();
     //std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     int res = 0;
-    while(abs(res) < 1000000) {
         res = negamax(GameBoard, -1, depth, numeric_limits<int>::min() + 1, numeric_limits<int>::max() - 1,
                       hash_board(GameBoard) - 1, Get_restrictions(GameBoard), 0, 0);
         Cache.clear();
         StateCache.clear();
-        //cout << "Best Move:" << bestMove.i << " " << bestMove.j << endl;
+        cout << "Best Move:" << bestMove.i << " " << bestMove.j << endl;
         //cout << "Score: " << res << endl;
         /*std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
         std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count()
@@ -669,29 +668,6 @@ int main()
             }
             cout << endl;
         }
-        res = negamax(GameBoard, 1, depth, numeric_limits<int>::min() + 1, numeric_limits<int>::max() - 1,
-                      hash_board(GameBoard) - 1, Get_restrictions(GameBoard), 0, 0);
-        Cache.clear();
-        StateCache.clear();
-        //cout << "Best Move:" << bestMove.i << " " << bestMove.j << endl;
-        //cout << "Score: " << res << endl;
-        /*std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-        std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count()
-                  << "[ms]" << std::endl;*/
-        GameBoard[bestMove.i][bestMove.j] = 1;
-        /*cout << "fc: " << fc << endl;
-        cout << "CacheHits: " << CacheHits << endl;
-        cout << "CacheCutoffs: " << CacheCutoffs << endl;
-        cout << "CachePuts: " << CachePuts << endl;
-        cout << "StateCacheHits: " << StateCacheHits << endl;
-        cout << "StateCachePuts: " << StateCachePuts << endl;*/
-        for (auto &i: GameBoard) {
-            for (int j: i) {
-                cout << j << ' ';
-            }
-            cout << endl;
-        }
-    }
     system("pause");
     return 0;
 }
