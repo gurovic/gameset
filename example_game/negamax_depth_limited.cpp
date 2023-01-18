@@ -647,20 +647,22 @@ int main()
     //std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     int res = 0;
     while(true) {
-        int x,y;
-        cin >> x >> y;
-        if(x == -1 && y == -1)break;
-        GameBoard[x][y] = -player;
+
         res = negamax(GameBoard, -1, depth, numeric_limits<int>::min() + 1, numeric_limits<int>::max() - 1,
                       hash_board(GameBoard) - 1, Get_restrictions(GameBoard), 0, 0);
         Cache.clear();
         StateCache.clear();
         cout << "Best Move:" << bestMove.i << " " << bestMove.j << endl;
         //cout << "Score: " << res << endl;
+        GameBoard[bestMove.i][bestMove.j] = -1;
+        int x,y;
+        cin >> x >> y;
+        if(x == -1 && y == -1)break;
+        GameBoard[x][y] = -player;
         /*std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
         std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count()
                   << "[ms]" << std::endl;*/
-        GameBoard[bestMove.i][bestMove.j] = -1;
+
         //if(abs(res) >= 100000){cout << -1 << -1 << endl;break;}
         /*cout << "fc: " << fc << endl;
         cout << "CacheHits: " << CacheHits << endl;
