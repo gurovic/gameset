@@ -639,13 +639,17 @@ int negamax(int newBoard[15][15], int player, int depth, int a, int b, int hash,
 
 int main()
 {
-    MaximumDepth = 6;
-    int depth = 6;
+    MaximumDepth = 4;
+    int depth = 4;
 
     int player = -1;
     Table_init();
     //std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     int res = 0;
+    while(abs(res) < 100000) {
+        int x,y;
+        cin >> x >> y;
+        GameBoard[x][y] = -player;
         res = negamax(GameBoard, -1, depth, numeric_limits<int>::min() + 1, numeric_limits<int>::max() - 1,
                       hash_board(GameBoard) - 1, Get_restrictions(GameBoard), 0, 0);
         Cache.clear();
@@ -656,18 +660,14 @@ int main()
         std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count()
                   << "[ms]" << std::endl;*/
         GameBoard[bestMove.i][bestMove.j] = -1;
+        if(abs(res) >= 100000){cout << -1 << -1 << endl;break;}
         /*cout << "fc: " << fc << endl;
         cout << "CacheHits: " << CacheHits << endl;
         cout << "CacheCutoffs: " << CacheCutoffs << endl;
         cout << "CachePuts: " << CachePuts << endl;
         cout << "StateCacheHits: " << StateCacheHits << endl;
         cout << "StateCachePuts: " << StateCachePuts << endl;*/
-        for (auto &i: GameBoard) {
-            for (int j: i) {
-                cout << j << ' ';
-            }
-            cout << endl;
-        }
+    }
     system("pause");
     return 0;
 }
