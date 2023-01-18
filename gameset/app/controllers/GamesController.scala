@@ -6,7 +6,7 @@ import play.api.mvc._
 @Singleton
 class GamesController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
   def index() = Action {
-    Ok("TODO") // #24 @seawind777
+    Ok(views.games.html.gamesList()) // #24 @seawind777
   }
 
   def addGet() = Action {

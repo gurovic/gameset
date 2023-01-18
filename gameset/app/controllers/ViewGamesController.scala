@@ -2,4 +2,5 @@ package controllers
 
 class ViewGamesController {
 
+
 }
