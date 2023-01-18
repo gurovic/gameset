@@ -646,7 +646,7 @@ int main()
     Table_init();
     //std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     int res = 0;
-    while(abs(res) < 100000) {
+    while(true) {
         int x,y;
         cin >> x >> y;
         if(x == -1 && y == -1)break;
@@ -661,7 +661,7 @@ int main()
         std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count()
                   << "[ms]" << std::endl;*/
         GameBoard[bestMove.i][bestMove.j] = -1;
-        if(abs(res) >= 100000){cout << -1 << -1 << endl;break;}
+        //if(abs(res) >= 100000){cout << -1 << -1 << endl;break;}
         /*cout << "fc: " << fc << endl;
         cout << "CacheHits: " << CacheHits << endl;
         cout << "CacheCutoffs: " << CacheCutoffs << endl;
