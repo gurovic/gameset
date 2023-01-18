@@ -675,13 +675,13 @@ Move iterative_mtdf(int depth) {
     int i = 2;
     array<int, 4 > x = { 0, 0, Rows - 1, Columns - 1 };
     int guess = evaluate_state(GameBoard, 1, hash_board(GameBoard), x);
-    cout << "Guess for best score: " << guess << endl;
+    //cout << "Guess for best score: " << guess << endl;
     while (i !=  depth + 2) {
         MaximumDepth_mtdf = i;
         guess = (mtdf(GameBoard, guess, i, Get_restrictions(GameBoard))).score;
-        cout <<"Depth: "<< i << endl;
-        cout << "Best Move:" << bestMove_mtdf.i << " " << bestMove_mtdf.j << endl;
-        cout << "Score: " << bestMove_mtdf.score << endl;
+        //cout <<"Depth: "<< i << endl;
+        //cout << "Best Move:" << bestMove_mtdf.i << " " << bestMove_mtdf.j << endl;
+        //cout << "Score: " << bestMove_mtdf.score << endl;
         //    let t11 = performance.now();
         //console.log((t11 - t00) / 1000)
         if (guess > 1999900) {
@@ -700,18 +700,21 @@ int main()
 
     int player = 1;
     Table_init();
-    ll res = 0;
+    int res = 0;
     //std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-    while(abs(res) < 100000) {
+    while(true) {
         int x,y;
         cin >> x >> y;
+        if(x == -1 && y == -1)break;
         GameBoard[x][y] = -player;
         res = negamax(GameBoard, player, depth, numeric_limits<int>::min() + 1, numeric_limits<int>::max() - 1,
                           hash_board(GameBoard) - 1, Get_restrictions(GameBoard), 0, 0);
         bestMove_mtdf = iterative_mtdf(depth);
         Cache_mtdf.clear();
         StateCache_mtdf.clear();
-        cout << "Best Move:" << bestMove_mtdf.i << " " << bestMove_mtdf.j << endl;
+        cout << bestMove_mtdf.i << " " << bestMove_mtdf.j << endl;
+        GameBoard[bestMove_mtdf.i][bestMove_mtdf.j] = player;
+
         /*std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
         td::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
         cout << "fc: " << fc << endl;
@@ -720,7 +723,7 @@ int main()
         cout << "CachePuts: " << CachePuts_mtdf << endl;
         cout << "StateCacheHits: " << StateCacheHits_mtdf << endl;
         cout << "StateCachePuts: " << StateCachePuts_mtdf << endl;*/
-        if(abs(res) >= 100000){cout << -1 << -1 << endl;break;}
+        //if(abs(res) >= 100000){cout << -1 << -1 << endl;break;}
     }
     system("pause");
     return 0;
