@@ -700,7 +700,7 @@ int main()
 
     int player = 1;
     Table_init();
-    ll res = 0;
+    int res = 0;
     //std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
     while(true) {
         int x,y;
