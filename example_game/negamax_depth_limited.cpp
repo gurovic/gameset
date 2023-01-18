@@ -639,8 +639,8 @@ int negamax(int newBoard[15][15], int player, int depth, int a, int b, int hash,
 
 int main()
 {
-    MaximumDepth = 4;
-    int depth = 4;
+    MaximumDepth = 6;
+    int depth = 6;
 
     int player = -1;
     Table_init();
@@ -652,7 +652,7 @@ int main()
                       hash_board(GameBoard) - 1, Get_restrictions(GameBoard), 0, 0);
         Cache.clear();
         StateCache.clear();
-        cout << "Best Move:" << bestMove.i << " " << bestMove.j << endl;
+        cout << bestMove.i << " " << bestMove.j << endl;
         //cout << "Score: " << res << endl;
         GameBoard[bestMove.i][bestMove.j] = -1;
         int x,y;
