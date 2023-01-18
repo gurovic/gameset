@@ -1,8 +1,7 @@
 package controllers
 
-import play.api.mvc.{BaseController, ControllerComponents}
-
-import javax.inject.Inject
+import javax.inject._
+import play.api.mvc._
 
 @Singleton
 class GamesController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {

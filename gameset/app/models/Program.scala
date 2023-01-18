@@ -8,5 +8,3 @@ class ProgramsTable(tag: Tag) extends Table[Program](tag, "programs") {
 
   def * = id <> (Program.apply, Program.unapply)
 }
-
-val Programs = TableQuery[ProgramsTable]

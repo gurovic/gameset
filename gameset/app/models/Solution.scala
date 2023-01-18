@@ -8,5 +8,3 @@ class SolutionsTable(tag: Tag) extends Table[Solution](tag, "solutions") {
 
   def * = id <> (Solution.apply, Solution.unapply)
 }
-
-val Solutions = TableQuery[SolutionsTable]

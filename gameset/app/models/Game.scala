@@ -2,6 +2,7 @@ package models
 
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.Tag
+import models._
 
 case class Game(id: Int,
                 name: String,
@@ -18,19 +19,17 @@ class GamesTable(tag: Tag) extends Table[Game](tag, "games") {
 
   def interactor = column[Int]("interactor")
 
-  def interactorFk = foreignKey("interactor_fk", interactor, Programs)(_.id)
+  def interactorFk = foreignKey("interactor_fk", interactor, TableQuery[ProgramsTable])(_.id)
 
   def replayRenderer = column[Int]("replay_renderer")
 
-  def replayRendererFk = foreignKey("replay_renderer_fk", replayRenderer, Programs)(_.id)
+  def replayRendererFk = foreignKey("replay_renderer_fk", replayRenderer, TableQuery[ProgramsTable])(_.id)
 
   def dumbSolution = column[Int]("dumb_solution")
 
-  def dumbSolutionFk = foreignKey("dumb_solution_fk", dumbSolution, Solutions)(_.id)
+  def dumbSolutionFk = foreignKey("dumb_solution_fk", dumbSolution, TableQuery[SolutionsTable])(_.id)
 
   def rules = column[String]("rules")
 
   def * = (id, name, interactor, replayRenderer, dumbSolution, rules) <> (Game.tupled, Game.unapply)
 }
-
-val Games = TableQuery[GamesTable]

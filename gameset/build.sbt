@@ -11,7 +11,6 @@ lazy val root = (project in file("."))
       "com.google.inject.extensions" % "guice-assistedinject" % "5.1.0",
       "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
       "com.typesafe.play" %% "play-slick" % "5.0.0",
-      "com.typesafe.play" %% "play-slick-evolutions" % "5.0.0",
       "org.postgresql" % "postgresql" % "42.5.1",
       guice,
       jdbc,

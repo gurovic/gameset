@@ -1,5 +1,6 @@
-gameset/target
-*/.metals/
-*/.bloop/
-*/.ammonite/
-*/metals.sbt
+**/.metals/
+**/.bloop/
+**/.idea/
+**/.vscode/
+**/.ammonite/
+**/metals.sbt
