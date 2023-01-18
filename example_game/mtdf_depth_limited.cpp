@@ -705,6 +705,7 @@ int main()
     while(abs(res) < 100000) {
         int x,y;
         cin >> x >> y;
+        if(x == -1 && y == -1)break;
         GameBoard[x][y] = -player;
         res = negamax(GameBoard, player, depth, numeric_limits<int>::min() + 1, numeric_limits<int>::max() - 1,
                           hash_board(GameBoard) - 1, Get_restrictions(GameBoard), 0, 0);
