@@ -11,10 +11,6 @@ GET         /assets/*file                                      controllers.Asset
 
 GET         /games                                             controllers.GamesListController.index()
 
-GET         /games/:gameID/solutions                           controllers.SolutionsController.index(gameID: Long)
-
 GET         /games/:gameID/solutions/new                       controllers.SolutionsController.newSolution(gameID: Long)
-
-GET         /games/:gameID/solutions/:solutionID               controllers.SolutionsController.viewSolution(gameID: Long, solutionID: Long)
 
 POST        /api/v1/games/:gameID/solutions/:solutionID        controllers.SolutionsController.uploadSolution(gameID: Long, solutionID: Long)

@@ -10,20 +10,12 @@ import scala.util.Random
 
 @Singleton
 class SolutionsController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
-  def index(gameID: Long) = Action {
-    Ok(Txt(s"Hi from the solutions index!\ngame ID is $gameID"))
-  }
-
-  def viewSolution(gameID: Long, solutionID: Long) = Action {
-    Ok(Txt(s"Hi from the solution page!\ngame ID is $gameID; solution ID is $solutionID"))
-  }
-
   def newSolution(gameID: Long) = Action {
     val newSolutionID = Random.nextInt()
 
     Ok(views.html.main("Solution upload")(Html(
       s"""
-         |<form action="/api/v1/games/$gameID/solutions/$newSolutionID" method="post" enctype="multipart/form-data">
+         |<form action="${routes.SolutionsController.uploadSolution(gameID, newSolutionID).url}" method="post" enctype="multipart/form-data">
          |
          |            <p>
          |                Select a file containing solution: <input type="file" name="solution" />
