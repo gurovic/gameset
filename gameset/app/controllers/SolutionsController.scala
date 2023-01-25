@@ -1,21 +1,20 @@
 package controllers
 
+import models.SolutionsRepository
 import play.api.mvc._
-import play.twirl.api.{Html, Txt}
+import play.twirl.api.Html
 
 import java.nio.file.{Files, Paths}
 import javax.inject._
-import scala.util.Random
-
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class SolutionsController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
-  def newSolution(gameID: Long) = Action {
-    val newSolutionID = Random.nextInt()
+class SolutionsController @Inject()(val repo: SolutionsRepository, val controllerComponents: ControllerComponents)(implicit ec: ExecutionContext) extends BaseController {
 
+  def newSolution(gameID: Long) = Action {
     Ok(views.html.main("Solution upload")(Html(
       s"""
-         |<form action="${routes.SolutionsController.uploadSolution(gameID, newSolutionID).url}" method="post" enctype="multipart/form-data">
+         |<form action="${routes.SolutionsController.uploadSolution(gameID).url}" method="post" enctype="multipart/form-data">
          |
          |            <p>
          |                Select a file containing solution: <input type="file" name="solution" />
@@ -27,31 +26,39 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
     )
   }
 
-  def uploadSolution(gameID: Long, solutionID: Long) = Action(parse.multipartFormData) { request =>
+  def uploadSolution(gameID: Long) = Action(parse.multipartFormData) { request =>
     request.body
       .file("solution")
       .map { solution =>
         // only get the last part of the filename
         // otherwise someone can send a path like ../../tmp/foo/bar.txt to write to other files on the system
         val filename = Paths.get(solution.filename).getFileName
+
         if (solution.fileSize > 1024 * 1024) {
           println("File too large")
           Redirect(routes.HomeController.index()).flashing("error" -> "File too large")
         }
 
-        val potentialPath = Paths.get(s"/tmp/gameset/game/$gameID/user-solutions/$solutionID")
-        if (!potentialPath.toFile.exists()) {
-          Files.createDirectories(potentialPath)
-          println("Created directory")
-        }
+        repo.create(gameID).map { solutionID =>
+          repo.getPath().map { path =>
+            val potentialPath = Paths.get(path.head)
 
-        solution.ref.copyTo(Paths.get(s"$potentialPath/$filename"), replace = true)
-        Redirect(routes.SolutionsController.viewSolution(gameID, solutionID)).flashing("success" -> "File uploaded")
+            if (!potentialPath.toFile.exists()) {
+              Files.createDirectories(potentialPath)
+              println("Created directory")
+            }
+
+            solution.ref.copyTo(Paths.get(s"$potentialPath/$filename"), replace = true)
+
+            Redirect(routes.SolutionsController.viewSolution(gameID, solutionID)).flashing("success" -> "File uploaded")
+          }
+
+
+        }
       }
       .getOrElse {
         println("No file uploaded")
         Redirect(routes.HomeController.index()).flashing("error" -> "Missing file")
       }
   }
-
 }
