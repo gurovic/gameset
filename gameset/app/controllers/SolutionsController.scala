@@ -2,7 +2,7 @@ package controllers
 
 import models.SolutionsRepository
 import play.api.mvc._
-import play.twirl.api.Html
+import play.twirl.api.{Html, Txt}
 
 import java.nio.file.{Files, Paths}
 import javax.inject._
@@ -26,20 +26,24 @@ class SolutionsController @Inject()(val repo: SolutionsRepository, val controlle
     )
   }
 
+  def viewSolution(gameID: Long, solutionID: Long) = Action {
+    Ok(Txt(s"file uploaded for game $gameID. ID is $solutionID"))
+  }
+
   def uploadSolution(gameID: Long) = Action(parse.multipartFormData) { request =>
     request.body
       .file("solution")
-      .map { solution =>
+      .map { solutionFile =>
         // only get the last part of the filename
         // otherwise someone can send a path like ../../tmp/foo/bar.txt to write to other files on the system
-        val filename = Paths.get(solution.filename).getFileName
+        val filename = Paths.get(solutionFile.filename).getFileName
 
-        if (solution.fileSize > 1024 * 1024) {
+        if (solutionFile.fileSize > 1024 * 1024) {
           println("File too large")
           Redirect(routes.HomeController.index()).flashing("error" -> "File too large")
         }
 
-        repo.create(gameID).map { solutionID =>
+        repo.create(gameID).map { solution =>
           repo.getPath().map { path =>
             val potentialPath = Paths.get(path.head)
 
@@ -48,17 +52,16 @@ class SolutionsController @Inject()(val repo: SolutionsRepository, val controlle
               println("Created directory")
             }
 
-            solution.ref.copyTo(Paths.get(s"$potentialPath/$filename"), replace = true)
+            solutionFile.ref.copyTo(Paths.get(s"$potentialPath/$filename"), replace = true)
 
-            Redirect(routes.SolutionsController.viewSolution(gameID, solutionID)).flashing("success" -> "File uploaded")
+            Redirect(routes.SolutionsController.viewSolution(gameID, solution.id)).flashing("success" -> "File uploaded")
           }
-
-
         }
       }
       .getOrElse {
         println("No file uploaded")
         Redirect(routes.HomeController.index()).flashing("error" -> "Missing file")
       }
+    Ok("File uploaded")
   }
 }
