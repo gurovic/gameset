@@ -1,1 +1,20 @@
 @()
+
+@helper.form(action = routes.GamesController.addPost, Symbol("enctype") -> "multipart/form-data") {
+    <div>
+        <label for="name">Name:</label>
+        <input id="name" type="text" name="name">
+    </div>
+    <div>
+        <label for="rules">Rules:</label>
+        <textarea id="rules" name="rules" cols="40" rows="5"></textarea>
+    </div>
+    <div>
+        <input type="file" name="interactor">
+    </div>
+
+    <p>
+        <input type="submit">
+    </p>
+
+}

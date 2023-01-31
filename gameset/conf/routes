@@ -9,11 +9,12 @@ GET         /                                          controllers.HomeControlle
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                              controllers.Assets.versioned(path="/public", file: Asset)
 
-GET         /games                                     controllers.GamesListController.index()
+GET         /games                                     controllers.GamesController.index()
+GET         /games/new                                 controllers.GamesController.addGet()
+POST        /games/new                                 controllers.GamesController.addPost()
 
 GET         /games/:gameID/solutions/new               controllers.SolutionsController.newSolution(gameID: Long)
 
 GET         /games/:gameID/solutions/solutionID        controllers.SolutionsController.viewSolution(gameID: Long, solutionID: Long)
-
 
 POST        /api/v1/games/:gameID/solutions/new        controllers.SolutionsController.uploadSolution(gameID: Long)
