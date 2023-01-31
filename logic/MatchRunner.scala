@@ -3,7 +3,7 @@ import scala.collection.mutable.ArrayBuffer
 
 //TODO: решить, какое количество решений у нас есть (сейчас в MatchReport есть поля Solution1 и Solution2, хотя вообще их может быть больше)
 
-class MatchRunner(solutions: List[SolutionRepository], interactorPath: String, matchCompletedObserver: MatchCompletedObserver) {
+class MatchRunner(solutions: List[SolutionsRepository], interactorPath: String, matchCompletedObserver: MatchCompletedObserver) {
   def run(): Unit = {
     val matchID = 0 //TODO: add to constructor parameters
 
@@ -51,7 +51,7 @@ class MatchRunner(solutions: List[SolutionRepository], interactorPath: String, m
     file.getPath
   }
 
-  private def createPipeName(solution: SolutionRepository, pipeType: String, matchID: Int): String = {
+  private def createPipeName(solution: SolutionsRepository, pipeType: String, matchID: Int): String = {
     matchID + "_sol_" + solution.id + "_" + pipeType + ".pipe"
   }
 }
