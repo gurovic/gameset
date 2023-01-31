@@ -1,5 +1,10 @@
+@(names: List[(String, String)])
 @main("Games"){
     <h2>Games list</h2>
-    <p style="align-content: center"><button>New</button><button>Play</button></p>
+    <ul>
+    @for(game <- names){
+        <li> <a href="/+@game(1)+/solutions/new"> @game(0) </a></li>
+        }
+    </ul>
 
 }

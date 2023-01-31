@@ -23,7 +23,14 @@ class GamesController @Inject() (val controllerComponents: ControllerComponents,
   val games = TableQuery[GamesTable]
   val SRC_DIR = "/home/gameset/interactor_src"
   def index() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.games.index())
+
+    val rs = db.executeQuery("SELECT * FROM games")
+    val Names = List()
+    while (rs.next) {
+      Names :+ Array(rs.getString("name"),rs.getString("id"))
+    }
+
+    Ok(views.html.games.index(Names))
   }
 
   def addGet() = Action {
