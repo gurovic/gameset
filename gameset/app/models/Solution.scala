@@ -6,8 +6,29 @@ import slick.jdbc.JdbcProfile
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
+import slick.jdbc.PostgresProfile.api._
+import slick.lifted.Tag
+
 case class Solution(id: Long, gameID: Long)
 
+class SolutionsTable(tag: Tag) extends Table[Solution](tag, "people") {
+
+  /**
+   * This is the tables default "projection".
+   *
+   * It defines how the columns are converted to and from the Solution object.
+   *
+   * In this case, we are simply passing the ID and gameID parameters to the Solution case classes
+   * apply and unapply methods.
+   */
+  def * = (id, gameID) <> ((Solution.apply _).tupled, Solution.unapply)
+
+  /** The ID column, which is the primary key, and auto incremented */
+  def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+
+  /** The name column */
+  def gameID = column[Long]("gameID")
+}
 
 /**
  * A repository for solutions.
@@ -66,22 +87,4 @@ class SolutionsRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(im
   /**
    * Here we define the table. It will have a name of people
    */
-  private class SolutionsTable(tag: Tag) extends Table[Solution](tag, "people") {
-
-    /**
-     * This is the tables default "projection".
-     *
-     * It defines how the columns are converted to and from the Solution object.
-     *
-     * In this case, we are simply passing the ID and gameID parameters to the Solution case classes
-     * apply and unapply methods.
-     */
-    def * = (id, gameID) <> ((Solution.apply _).tupled, Solution.unapply)
-
-    /** The ID column, which is the primary key, and auto incremented */
-    def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
-
-    /** The name column */
-    def gameID = column[Long]("gameID")
-  }
 }

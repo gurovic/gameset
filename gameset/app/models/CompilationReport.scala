@@ -5,14 +5,14 @@ import slick.lifted.Tag
 import models._
 
 case class CompilationReport(
-  id: Int,
+  id: Long,
   isSuccessful: Boolean,
   compilerMessage: String,
   path: String
 )
 
 class CompilationReportsTable(tag: Tag) extends Table[CompilationReport](tag, "CompilationReports") {
-  def id = column[Int]("id", O.PrimaryKey)
+  def id = column[Long]("id", O.PrimaryKey)
   def isSuccessful = column[Boolean]("isSuccessful")
   def compilerMessage = column[String]("compilerMessage")
   def path = column[String]("path")
