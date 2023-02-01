@@ -1,10 +1,10 @@
-@(names: List[(String, String)])
+@(names: Seq[(String, String)])
 @main("Games"){
     <h2>Games list</h2>
     <ul>
     @for(game <- names){
-        <li> <a href="/+@game(1)+/solutions/new"> @game(0) </a></li>
+        <li> <a href="/+@game._2+/solutions/new"> @game._1 </a></li>
         }
     </ul>
-
+    <a href="/new"> New </a>
 }

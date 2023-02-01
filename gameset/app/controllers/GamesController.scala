@@ -22,15 +22,14 @@ class GamesController @Inject() (val controllerComponents: ControllerComponents,
   extends BaseController with HasDatabaseConfigProvider[JdbcProfile] {
   val games = TableQuery[GamesTable]
   val SRC_DIR = "/home/gameset/interactor_src"
-  def index() = Action { implicit request: Request[AnyContent] =>
+  def index() = Action.async { req =>
 
-    val rs = db.executeQuery("SELECT * FROM games")
-    val Names = List()
-    while (rs.next) {
-      Names :+ Array(rs.getString("name"),rs.getString("id"))
-    }
-
-    Ok(views.html.games.index(Names))
+    db.run(games.map { game =>
+      game.name + " " + game.id
+    }.result)
+      .map { allGames =>
+        Ok(views.html.games.index(allGames))
+      }
   }
 
   def addGet() = Action {
