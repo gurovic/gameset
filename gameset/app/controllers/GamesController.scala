@@ -25,7 +25,7 @@ class GamesController @Inject() (val controllerComponents: ControllerComponents,
   def index() = Action.async { req =>
 
     db.run(games.map { game =>
-      game.name + " " + game.id
+      (game.name, game.id.toString())
     }.result)
       .map { allGames =>
         Ok(views.html.games.index(allGames))

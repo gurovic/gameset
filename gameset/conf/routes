@@ -15,6 +15,6 @@ POST        /games/new                                 controllers.GamesControll
 
 GET         /games/:gameID/solutions/new               controllers.SolutionsController.newSolution(gameID: Long)
 
-GET         /games/:gameID/solutions/solutionID        controllers.SolutionsController.viewSolution(gameID: Long, solutionID: Long)
+GET         /games/:gameID/solutions/:solutionID        controllers.SolutionsController.viewSolution(gameID: Long, solutionID: Long)
 
 POST        /api/v1/games/:gameID/solutions/new        controllers.SolutionsController.uploadSolution(gameID: Long)
