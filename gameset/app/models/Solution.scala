@@ -59,6 +59,10 @@ class SolutionsRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(im
     solution.result
   }
 
+  def getSolution(id: Long) = db.run {
+    solution.filter(_.id === id).result
+  }
+
   /**
    * Here we define the table. It will have a name of people
    */

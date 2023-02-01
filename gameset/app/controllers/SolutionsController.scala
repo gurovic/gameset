@@ -27,7 +27,8 @@ class SolutionsController @Inject()(val repo: SolutionsRepository, val controlle
   }
 
   def viewSolution(gameID: Long, solutionID: Long) = Action {
-    Ok(Txt(s"file uploaded for game $gameID. ID is $solutionID"))
+    val solution = repo.getSolution(solutionID)
+    Ok(views.html.viewSolitions(solution))
   }
 
   def uploadSolution(gameID: Long) = Action(parse.multipartFormData) { request =>
