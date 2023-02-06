@@ -26,9 +26,11 @@ class SolutionsController @Inject()(val repo: SolutionsRepository, val controlle
     )
   }
 
-  def viewSolution(gameID: Long, solutionID: Long) = Action {
-    val solution = repo.getSolution(solutionID)
-    Ok(views.html.viewSolitions(solution))
+  def viewSolution(gameID: Long, solutionID: Long) = Action.async {
+    repo.getSolution(solutionID).map {
+      case Seq() => Ok("No solution")
+      case Seq(s) => Ok(views.html.viewSolitions(s"Id: ${s.id} gameId: ${s.gameID}\n\n"))
+    }
   }
 
   def uploadSolution(gameID: Long) = Action(parse.multipartFormData) { request =>

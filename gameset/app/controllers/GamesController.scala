@@ -10,6 +10,7 @@ import java.nio.file.Paths
 import javax.inject._
 import models._
 
+import java.io.File
 import scala.concurrent.ExecutionContext
 
 /**
@@ -24,9 +25,7 @@ class GamesController @Inject() (val controllerComponents: ControllerComponents,
   val SRC_DIR = "/home/gameset/interactor_src"
   def index() = Action.async { req =>
 
-    db.run(games.map { game =>
-      (game.name, game.id.toString())
-    }.result)
+    db.run(games.result)
       .map { allGames =>
         Ok(views.html.games.index(allGames))
       }
@@ -43,9 +42,10 @@ class GamesController @Inject() (val controllerComponents: ControllerComponents,
       val path = s"$SRC_DIR/$id/interactor.cpp"
       req.body
         .file("interactor")
-        .map(
-          _.ref.copyTo(Paths.get(path), replace = true)
-        )
+        .map { file =>
+          new File(s"$SRC_DIR/$id/").mkdirs()
+          file.ref.copyTo(Paths.get(path), replace = true)
+        }
       val query = for {
         nameS <- req.body.dataParts.get("name")
         name <- nameS.headOption

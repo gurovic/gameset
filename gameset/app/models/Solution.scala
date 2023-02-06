@@ -11,7 +11,7 @@ import slick.lifted.Tag
 
 case class Solution(id: Long, gameID: Long)
 
-class SolutionsTable(tag: Tag) extends Table[Solution](tag, "people") {
+class SolutionsTable(tag: Tag) extends Table[Solution](tag, "solutions") {
 
   /**
    * This is the tables default "projection".
@@ -27,7 +27,7 @@ class SolutionsTable(tag: Tag) extends Table[Solution](tag, "people") {
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
 
   /** The name column */
-  def gameID = column[Long]("gameID")
+  def gameID = column[Long]("gameid")
 }
 
 /**

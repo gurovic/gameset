@@ -11,7 +11,7 @@ case class Game(id: Long,
 
 
 class GamesTable(tag: Tag) extends Table[Game](tag, "games") {
-  def id = column[Long]("id", O.PrimaryKey)
+  def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
 
   def name = column[String]("name")
 
