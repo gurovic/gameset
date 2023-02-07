@@ -22,7 +22,7 @@ class GamesController @Inject() (val controllerComponents: ControllerComponents,
                                  val dbConfigProvider: DatabaseConfigProvider)
   extends BaseController with HasDatabaseConfigProvider[JdbcProfile] {
   val games = TableQuery[GamesTable]
-  val SRC_DIR = "/home/gameset/interactor_src"
+  val SRC_DIR = "../data/games"
   def index() = Action.async { req =>
 
     db.run(games.result)

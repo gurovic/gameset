@@ -70,7 +70,7 @@ class SolutionsRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(im
   }
 
   def getPath() = db.run {
-    solution.map(s => (s"~/gameset/data/games/${s.gameID}/user-solutions/${s.id}")).result
+    solution.map(s => (s"../data/games/${s.gameID}/user-solutions/${s.id}")).result
   }
 
   /**
