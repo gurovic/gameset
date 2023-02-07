@@ -4,5 +4,5 @@
 **/.vscode/
 **/.ammonite/
 **/metals.sbt
-db-data/
+data/
 .env
