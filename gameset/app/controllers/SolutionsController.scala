@@ -47,8 +47,7 @@ class SolutionsController @Inject()(val repo: SolutionsRepository, val controlle
         }
 
         repo.create(gameID).map { solution =>
-          repo.getPath().map { path =>
-            val potentialPath = Paths.get(path.head)
+            val potentialPath = Paths.get(solution.path)
 
             if (!potentialPath.toFile.exists()) {
               Files.createDirectories(potentialPath)
@@ -58,7 +57,6 @@ class SolutionsController @Inject()(val repo: SolutionsRepository, val controlle
             solutionFile.ref.copyTo(Paths.get(s"$potentialPath/$filename"), replace = true)
 
             Redirect(routes.SolutionsController.viewSolution(gameID, solution.id)).flashing("success" -> "File uploaded")
-          }
         }
       }
       .getOrElse {

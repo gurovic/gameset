@@ -9,7 +9,9 @@ import scala.concurrent.{ExecutionContext, Future}
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.Tag
 
-case class Solution(id: Long, gameID: Long)
+case class Solution(id: Long, gameID: Long) {
+  def path = s"../data/games/${gameID}/user-solutions/${id}"
+}
 
 class SolutionsTable(tag: Tag) extends Table[Solution](tag, "solutions") {
 
@@ -67,10 +69,6 @@ class SolutionsRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(im
       into ((nameAge, id) => Solution(id, nameAge))
       // And finally, insert the person into the database
       ) += gameID
-  }
-
-  def getPath() = db.run {
-    solution.map(s => (s"../data/games/${s.gameID}/user-solutions/${s.id}")).result
   }
 
   /**
