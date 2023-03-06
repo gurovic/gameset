@@ -1,37 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Diagram>
   <ID>JAVA</ID>
-  <OriginalElement />
+  <OriginalElement>C:/Users/Вадим Камалов/gameset/UMLDiagramsJava/src</OriginalElement>
   <nodes>
-    <node x="-181.0" y="95.53412462908014">Match</node>
-    <node x="-177.5" y="-150.5">MatchReport</node>
-    <node x="-5.0" y="-150.5">Solution</node>
+    <node x="188.0" y="666.0">Pair</node>
+    <node x="-130.0" y="666.0">MatchManager</node>
+    <node x="387.0" y="666.0">Solution</node>
+    <node x="739.5441176470588" y="-15.0">MatchReport</node>
+    <node x="578.6838235294117" y="354.0">Match</node>
+    <node x="281.0" y="299.0">Tournament</node>
+    <node x="-130.0" y="299.0">TournamentSystemRoundRobin</node>
+    <node x="513.5441176470588" y="75.0">MatchFinishedObserver</node>
+    <node x="539.0" y="666.0">Invoker</node>
+    <node x="363.5" y="75.0">Game</node>
+    <node x="-90.75" y="75.0">TournamentSystem</node>
   </nodes>
   <notes />
   <edges>
+    <edge source="TournamentSystemRoundRobin" target="MatchFinishedObserver" relationship="REALIZATION">
+      <point x="-97.75" y="-161.0" />
+      <point x="-32.25" y="279.0" />
+      <point x="82.18382352941177" y="279.0" />
+      <point x="82.18382352941177" y="249.0" />
+      <point x="565.0441176470588" y="249.0" />
+      <point x="-51.5" y="27.0" />
+    </edge>
+    <edge source="Match" target="MatchFinishedObserver" relationship="TO_ONE">
+      <point x="-113.13970588235293" y="-106.0" />
+      <point x="-0.0" y="27.0" />
+    </edge>
+    <edge source="Match" target="Game" relationship="TO_ONE">
+      <point x="1.7647058825787099E-4" y="-106.0" />
+      <point x="729.684" y="274.0" />
+      <point x="409.0" y="274.0" />
+      <point x="-0.0" y="27.0" />
+    </edge>
+    <edge source="TournamentSystemRoundRobin" target="Game" relationship="TO_ONE">
+      <point x="40.0" y="-161.0" />
+      <point x="105.5" y="274.0" />
+      <point x="409.0" y="274.0" />
+      <point x="-0.0" y="27.0" />
+    </edge>
+    <edge source="TournamentSystemRoundRobin" target="TournamentSystem" relationship="REALIZATION">
+      <point x="-97.75" y="-161.0" />
+      <point x="-32.25" y="279.0" />
+      <point x="82.18382352941177" y="279.0" />
+      <point x="82.18382352941177" y="249.0" />
+      <point x="-12.75" y="249.0" />
+      <point x="-78.0" y="27.0" />
+    </edge>
     <edge source="Match" target="MatchReport" relationship="TO_ONE">
-      <point x="8.371012611275944" y="-117.07715133531158" />
-      <point x="-50.11415059347186" y="87.45697329376856" />
-      <point x="-50.11415059347186" y="77.47079005934717" />
-      <point x="-61.0" y="77.47079005934717" />
-      <point x="-61.0" y="-3.719584569732916" />
-      <point x="-63.0" y="-3.719584569732916" />
-      <point x="40.0" y="27.5" />
+      <point x="128.36029411764707" y="-106.0" />
+      <point x="-0.0" y="117.0" />
     </edge>
-    <edge source="Match" target="Solution" relationship="TO_MANY">
-      <point x="59.50602744807122" y="-110.37091988130564" />
-      <point x="-1.4939725519287776" y="-56.75" />
-      <point x="17.0" y="-56.75" />
-      <point x="-40.0" y="27.5" />
+    <edge source="Tournament" target="TournamentSystem" relationship="TO_ONE">
+      <point x="-0.0" y="161.0" />
+      <point x="409.0" y="638.5" />
+      <point x="-147.5" y="638.5" />
+      <point x="-147.5" y="102.0" />
+      <point x="-156.0" y="-0.0" />
     </edge>
-    <edge source="Match" target="MatchReport" relationship="CREATE">
-      <point x="-60.0" y="-132.0" />
-      <point x="-121.0" y="-23.0" />
-      <point x="-143.0" y="-23.0" />
-      <point x="-40.0" y="27.5" />
+    <edge source="Tournament" target="Game" relationship="TO_ONE">
+      <point x="-0.0" y="-161.0" />
+      <point x="-0.0" y="27.0" />
     </edge>
   </edges>
-  <settings layout="Hierarchic Compact" zoom="0.7634690265486727" showDependencies="true" x="161.35377642804133" y="216.00915708456975" />
+  <settings layout="Hierarchic" zoom="0.6166484118291348" showDependencies="true" x="433.5" y="441.5" />
   <SelectedNodes />
   <Categories>
     <Category>Constructors</Category>
