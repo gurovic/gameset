@@ -1,4 +1,6 @@
-class Match(private val solutions: IndexedSeq[Solution], private val game: Game) {
+import java.util
+
+class Match(private val solutions: IndexedSeq[util.AbstractMap.SimpleEntry[Int, Solution]], private val game: Game) {
   private var matchFinishedObserver: MatchFinishedObserver = _
   private var invokers: Array[Invoker] = _
   private val matchReport: MatchReport = new MatchReport
@@ -21,7 +23,7 @@ class Match(private val solutions: IndexedSeq[Solution], private val game: Game)
     val root = System.getProperty("user.dir") + matchID
     invokers = Array[Invoker](solutions.length + 1)
     for (i <- solutions.indices) {
-      invokers(i) = new Invoker(solutions(i).path)
+      invokers(i) = new Invoker(solutions(i).getValue.path)
       invokers(i).redirectStdin = root + "in_" + i + ".pipe"
       invokers(i).redirectStdout = root + "out_" + i + ".pipe"
       invokers(i).redirectStderr = root + "err_" + i + ".pipe"
