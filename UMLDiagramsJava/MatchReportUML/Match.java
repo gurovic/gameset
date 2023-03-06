@@ -22,6 +22,7 @@ public class Match {
     }
 
     private void submitReportCreated() {
+        report.submitToTournamentSystem();
         System.out.println("Report created");
     }
 

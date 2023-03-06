@@ -39,7 +39,7 @@ public class MatchReport {
         return solutionPlaces[solutionId];
     }
 
-    public void submitToTournamentSystem(Tournament tournament) {
+    public void submitToTournamentSystem(long tournamentId) {
         /* Submit the report; placeholder, may be executed by Match instead */
         System.out.println("Report submitted")
         return;
