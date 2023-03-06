@@ -90,16 +90,14 @@ class TournamentSystemRoundRobin extends TournamentSystem with MatchFinishedObse
     if (!matchReport.isDraw) {
       this.solutionGroups.get(matchReport.getWinnerIndex).get(matchReport.getLoserIndex).setValue(3)
       this.solutionGroups.get(matchReport.getLoserIndex).get(matchReport.getWinnerIndex).setValue(1)
-      this.matchReportsMatrix.get(matchReport.getWinnerIndex).get(matchReport.getLoserIndex) = matchReport
-      this.matchReportsMatrix.get(matchReport.getLoserIndex).get(matchReport.getWinnerIndex) = matchReport
-      this.matchesCompleted += 1
     }
     else {
       this.solutionGroups.get(matchReport.getWinnerIndex).get(matchReport.getLoserIndex).setValue(2)
       this.solutionGroups.get(matchReport.getLoserIndex).get(matchReport.getWinnerIndex).setValue(2)
-      this.matchReportsMatrix.get(matchReport.getWinnerIndex).get(matchReport.getLoserIndex) = matchReport
-      this.matchReportsMatrix.get(matchReport.getLoserIndex).get(matchReport.getWinnerIndex) = matchReport
-      this.matchesCompleted += 1
     }
+
+    this.matchReportsMatrix.get(matchReport.getWinnerIndex).get(matchReport.getLoserIndex) = matchReport
+    this.matchReportsMatrix.get(matchReport.getLoserIndex).get(matchReport.getWinnerIndex) = matchReport
+    this.matchesCompleted += 1
   }
 }
