@@ -86,7 +86,7 @@ class TournamentSystemRoundRobin extends TournamentSystem with MatchFinishedObse
     this.solutions.size * (this.solutions.size - 1) / 2
   }
 
-  override def recerefive(matchReport: MatchReport): Unit = {
+  override def receive(matchReport: MatchReport): Unit = {
     if (!matchReport.isDraw) {
       this.solutionGroups.get(matchReport.getWinnerIndex).get(matchReport.getLoserIndex).setValue(3)
       this.solutionGroups.get(matchReport.getLoserIndex).get(matchReport.getWinnerIndex).setValue(1)
