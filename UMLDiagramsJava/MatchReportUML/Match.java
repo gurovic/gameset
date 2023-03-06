@@ -12,14 +12,7 @@ public class Match {
     }
 
     public void run(MatchFinishedObserver observer) {
-        this.matchFinishedObserver = observer;
-        new InvokerPull().getInstance().addToPool(
-                new InvokerRequest(
-                        prepareInvokers(),
-                        createReport,
-                        Some(setupInvokers)
-                )
-        );
+        /* placeholder */
     }
 
     private void createReport() {
