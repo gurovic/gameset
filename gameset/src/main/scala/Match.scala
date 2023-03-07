@@ -18,49 +18,48 @@ class Match(private val solutions: IndexedSeq[util.AbstractMap.SimpleEntry[Int, 
     )
   }
 
-  def prepareInvokers(): Unit = {
+  private def prepareInvokers(): Unit = {
     val matchID = matchReport.matchID
     val root = System.getProperty("user.dir") + matchID
     invokers = Array[Invoker](solutions.length + 1)
     for (i <- solutions.indices) {
-      invokers(i) = new Invoker(solutions(i).getValue.path)
-      invokers(i).redirectStdin = root + "in_" + i + ".pipe"
-      invokers(i).redirectStdout = root + "out_" + i + ".pipe"
-      invokers(i).redirectStderr = root + "err_" + i + ".pipe"
+      invokers(i) = new Invoker(solutions(i).getValue.path, Seq())
+      invokers(i).stdin = Option(root + "in_" + i + ".pipe")
+      invokers(i).stdout = Option(root + "out_" + i + ".pipe")
+      invokers(i).stderr = Option(root + "err_" + i + ".pipe")
     }
 
     prepareInteractor(root)
   }
 
-  def prepareInteractor(root: String): Unit = {
-    val argv = new StringBuilder()
+  private def prepareInteractor(root: String): Unit = {
+    val argv = Seq[String](solutions.length)
     for (i <- 0 until invokers.length - 1) {
-      argv.append(invokers(i).redirectStdin).append(":").append(invokers(i).redirectStdout).append(",")
+      argv(i) = invokers(i).stdin + ":" + invokers(i).stdout
     }
 
-    val interactor = new Invoker(game.interactorPath)
-    interactor.argv = argv.toString()
-    interactor.redirectStdin = root + "in" + "_inter" + ".pipe"
-    interactor.redirectStdout = root + "out" + "_inter" + ".pipe"
-    interactor.redirectStderr = root + "err" + "_inter" + ".pipe"
+    val interactor = new Invoker(game.interactorPath, argv)
+    interactor.stdin = Option(root + "in" + "_inter" + ".pipe")
+    interactor.stdout = Option(root + "out" + "_inter" + ".pipe")
+    interactor.stderr = Option(root + "err" + "_inter" + ".pipe")
 
     invokers(solutions.length) = interactor
   }
 
-  def setupInvokers(): Unit = {
+  private def setupInvokers(): Unit = {
     for (invoker <- invokers) {
-      createPipe(invoker.redirectStdin)
-      createPipe(invoker.redirectStdout)
-      createPipe(invoker.redirectStderr)
+      createPipe(invoker.stdin.get)
+      createPipe(invoker.stdout.get)
+      createPipe(invoker.stderr.get)
     }
   }
 
-  def createPipe(path: String): Unit = {
+  private def createPipe(path: String): Unit = {
     val cmds = Array("/bin/sh", "-c", String.format("\"mkfifo ~/%s && tail -f ~/%s | csh -s\"", path, path))
     Runtime.getRuntime.exec(cmds)
   }
 
-  def createReport(): Unit = {
+  private def createReport(): Unit = {
     matchFinishedObserver.receive(new MatchReport())
   }
 }
