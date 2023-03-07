@@ -20,11 +20,15 @@
       <point x="-65.0" y="149.0" />
       <point x="0.0" y="27.0" />
     </edge>
+    <edge source="Match" target="MatchReport" relationship="CREATE">
+      <point x="-60.0" y="-132.0" />
+      <point x="-121.0" y="-23.0" />
+      <point x="-143.0" y="-23.0" />
+      <point x="-40.0" y="27.5" />
+    </edge>
   </edges>
-  <settings layout="Hierarchic Compact" zoom="0.9279437609841827" showDependencies="true" x="-148.0" y="133.5" />
-  <SelectedNodes>
-    <node>InvokerReport</node>
-  </SelectedNodes>
+  <settings layout="Hierarchic Compact" zoom="0.7634690265486727" showDependencies="true" x="161.0" y="216.0" />
+  <SelectedNodes />
   <Categories>
     <Category>Constructors</Category>
     <Category>Fields</Category>
