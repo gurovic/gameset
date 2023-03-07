@@ -4,7 +4,7 @@ class Match(private val solutions: IndexedSeq[util.AbstractMap.SimpleEntry[Int, 
   private var matchFinishedObserver: MatchFinishedObserver = _
   private var invokers: Array[Invoker] = _
   private val matchReport: MatchReport = new MatchReport
-
+  private val pipePathRoot: String = "pipes/"
 
   def run(observer: MatchFinishedObserver): Unit = {
     matchFinishedObserver = observer
@@ -19,14 +19,11 @@ class Match(private val solutions: IndexedSeq[util.AbstractMap.SimpleEntry[Int, 
   }
 
   private def prepareInvokers(): Unit = {
-    val matchID = matchReport.matchID
-    val root = System.getProperty("user.dir") + matchID
+    val root = pipePathRoot + matchReport.matchID
     invokers = Array[Invoker](solutions.length + 1)
     for (i <- solutions.indices) {
       invokers(i) = new Invoker(solutions(i).getValue.path, Seq())
-      invokers(i).stdin = Option(root + "in_" + i + ".pipe")
-      invokers(i).stdout = Option(root + "out_" + i + ".pipe")
-      invokers(i).stderr = Option(root + "err_" + i + ".pipe")
+      initInvokerInOutNames(invokers(i), root)
     }
 
     prepareInteractor(root)
@@ -39,10 +36,7 @@ class Match(private val solutions: IndexedSeq[util.AbstractMap.SimpleEntry[Int, 
     }
 
     val interactor = new Invoker(game.interactorPath, argv)
-    interactor.stdin = Option(root + "in" + "_inter" + ".pipe")
-    interactor.stdout = Option(root + "out" + "_inter" + ".pipe")
-    interactor.stderr = Option(root + "err" + "_inter" + ".pipe")
-
+    initInvokerInOutNames(interactor, root)
     invokers(solutions.length) = interactor
   }
 
@@ -52,6 +46,12 @@ class Match(private val solutions: IndexedSeq[util.AbstractMap.SimpleEntry[Int, 
       createPipe(invoker.stdout.get)
       createPipe(invoker.stderr.get)
     }
+  }
+
+  private def initInvokerInOutNames(invoker: Invoker, root: String): Unit = {
+    invoker.stdin = Option(root + "_in" + "_inter" + ".pipe")
+    invoker.stdout = Option(root + "_out" + "_inter" + ".pipe")
+    invoker.stderr = Option(root + "_err" + "_inter" + ".pipe")
   }
 
   private def createPipe(path: String): Unit = {
