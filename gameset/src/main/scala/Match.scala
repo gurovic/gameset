@@ -9,7 +9,7 @@ class Match(private val solutions: IndexedSeq[util.AbstractMap.SimpleEntry[Int, 
   def run(observer: MatchFinishedObserver): Unit = {
     matchFinishedObserver = observer
     prepareInvokers()
-    InvokerPull().getInstance().addToPool(
+    InvokerPool().getInstance().addToPool(
       new InvokerRequest(
         invokers,
         createReport,
