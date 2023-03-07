@@ -12,14 +12,13 @@ class TournamentSystemRoundRobin extends TournamentSystem with MatchFinishedObse
   private var matchesCompleted = 0
   private var matchesNumber = 0
   private var solutions: util.List[Solution] = _
-  private var matchReportsMatrix: util.List[util.List[MatchReport]] = _
+  private val matchReports: util.List[MatchReport] = _
   private var solutionGroups: util.List[util.List[util.Map.Entry[Solution, Integer]]] = _
 
-  def startTesting(solutions: util.List[Solution], game: Game, callback: Function[util.List[util.List[MatchReport]], _]): Unit = {
+  def startTesting(solutions: util.List[Solution], game: Game, callback: Function[util.List[MatchReport], _]): Unit = {
     this.game = game
     this.solutions = solutions
     this.solutionGroups = generateSolutionGroups
-    this.matchReportsMatrix = generateMatchReportsMatrix
     this.matchesNumber = generateMatchesNumber
 
     for (match_ <- getNextMatch) {
@@ -30,7 +29,7 @@ class TournamentSystemRoundRobin extends TournamentSystem with MatchFinishedObse
       Thread.sleep(1000)
     }
 
-    callback(this.matchReportsMatrix)
+    callback(this.matchReports)
   }
 
   private def getNextMatch: IndexedSeq[Match] = {
@@ -64,24 +63,6 @@ class TournamentSystemRoundRobin extends TournamentSystem with MatchFinishedObse
     solutionGroups
   }
 
-  private def generateMatchReportsMatrix: util.List[util.List[MatchReport]] = {
-    val rows = this.solutions.size / 2
-    val columns = this.solutions.size - rows
-    val matchReportsMatrix = new util.ArrayList[util.List[MatchReport]]
-
-    for (_ <- 0 until rows) {
-      val row = new util.ArrayList[MatchReport]
-
-      for (_ <- 0 until columns) {
-        row.add(null)
-      }
-
-      matchReportsMatrix.add(row)
-    }
-
-    matchReportsMatrix
-  }
-
   private def generateMatchesNumber: Int = {
     this.solutions.size * (this.solutions.size - 1) / 2
   }
@@ -96,8 +77,7 @@ class TournamentSystemRoundRobin extends TournamentSystem with MatchFinishedObse
       this.solutionGroups.get(matchReport.getLoserIndex).get(matchReport.getWinnerIndex).setValue(2)
     }
 
-    this.matchReportsMatrix.get(matchReport.getWinnerIndex).get(matchReport.getLoserIndex) = matchReport
-    this.matchReportsMatrix.get(matchReport.getLoserIndex).get(matchReport.getWinnerIndex) = matchReport
+    this.matchReports.add(matchReport)
     this.matchesCompleted += 1
   }
 }
