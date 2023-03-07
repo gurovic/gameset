@@ -2,10 +2,32 @@
 <Diagram>
   <ID>JAVA</ID>
   <OriginalElement />
-  <nodes />
+  <nodes>
+    <node x="50.5" y="-116.0">InvokerReport</node>
+    <node x="-121.0" y="-58.0">Solution</node>
+    <node x="-412.0" y="-151.0">MatchReport</node>
+    <node x="-453.5" y="180.5">Match</node>
+  </nodes>
   <notes />
-  <edges />
-  <settings layout="Hierarchic Compact" zoom="0.9543362831858409" showDependencies="true" x="797.400037091988" y="126.5621290801187" />
+  <edges>
+    <edge source="Match" target="MatchReport" relationship="TO_ONE">
+      <point x="0.0" y="-108.5" />
+      <point x="0.0" y="120.0" />
+    </edge>
+    <edge source="Match" target="Solution" relationship="TO_MANY">
+      <point x="0.0" y="-108.5" />
+      <point x="-285.0" y="149.0" />
+      <point x="-65.0" y="149.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="Match" target="MatchReport" relationship="CREATE">
+      <point x="-60.0" y="-132.0" />
+      <point x="-121.0" y="-23.0" />
+      <point x="-143.0" y="-23.0" />
+      <point x="-40.0" y="27.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.7634690265486727" showDependencies="true" x="161.0" y="216.0" />
   <SelectedNodes />
   <Categories>
     <Category>Constructors</Category>
