@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>D:/Download/gameset/gameset/UMLDiagramsJava/MatchReportUML</OriginalElement>
+  <nodes>
+    <node x="-193.0" y="-150.0">Solution</node>
+    <node x="168.5" y="-30.0">InvokerReport</node>
+    <node x="15.5" y="-30.0">Tournament</node>
+    <node x="-194.0" y="87.5">MatchReport</node>
+    <node x="-187.0" y="-41.5">Match</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic Compact" zoom="0.7145421903052065" showDependencies="true" x="59.0" y="118.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
