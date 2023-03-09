@@ -1,15 +1,18 @@
 import java.util.Date
-import java.util.List
+import java.util
+import scala.collection.mutable.ListBuffer
+import scala.collection.immutable.List
+import scala.collection.JavaConverters._
 import TournamentStatus._
 
-class Tournament(private val game : Game) {
+class Tournament(private val game : Game, private val tournamentSystem : TournamentSystem) {
   private var name: String = _
   var status: TournamentStatus = Pending
-  private var tournamentSystem: TournamentSystem = _
-  private var solutions: List[Solution] = _
+  private var solutions: ListBuffer[Solution] = _
   var openingTime: Date = _
   var closeTime: Date = _
   var solutionsLimit: Int = _
+  var results: List[MatchReport] = _
 
   def open(): Unit = {
     if (status != Pending) {
@@ -24,11 +27,12 @@ class Tournament(private val game : Game) {
       throw new IllegalStateException("Only opened tournament can be closed")
     }
     status = Testing
-    tournamentSystem.startTesting(solutions, game, conclude)
+    tournamentSystem.startTesting(solutions.asJava, game, conclude)
   }
 
-  def conclude(matchReports: List[List[MatchReport]]): Unit = {
-    // TODO
+  private def conclude(matchReports: util.List[MatchReport]): Unit = {
+    results = matchReports.asScala.toList
+    status = Finished
   }
 
   def addSolution(solution: Solution): Boolean = {
@@ -38,7 +42,7 @@ class Tournament(private val game : Game) {
       throw new RuntimeException("Solution limit exceeded")
     }
 
-    solutions = solutions :+ solution
+    solutions += solution
     return true
   }
 }
