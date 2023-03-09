@@ -7,4 +7,11 @@ class InvokerRequest(invokersNum: Int,
     this(invokers.size, invokers, callback, setup)
   }
 
+  def getInvokersNum(): Int = {
+    invokersNum
+  }
+
+  def getInvokers() : Array[Invoker] = {
+    invokers
+  }
 }

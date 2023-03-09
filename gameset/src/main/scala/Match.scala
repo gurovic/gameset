@@ -1,6 +1,6 @@
 import java.util
 
-class Match(private val solutions: IndexedSeq[util.AbstractMap.SimpleEntry[Int, Solution]], private val game: Game) {
+class Match(private val solutions: List[util.AbstractMap.SimpleEntry[Int, Solution]], private val game: Game) {
   private var matchFinishedObserver: MatchFinishedObserver = _
   private var invokers: Array[Invoker] = _
   private val matchReport: MatchReport = new MatchReport
@@ -9,7 +9,7 @@ class Match(private val solutions: IndexedSeq[util.AbstractMap.SimpleEntry[Int, 
   def run(observer: MatchFinishedObserver): Unit = {
     matchFinishedObserver = observer
     prepareInvokers()
-    InvokerPool().getInstance().addToPool(
+    InvokerPool.addToQueue(
       new InvokerRequest(
         invokers,
         createReport,
@@ -19,8 +19,8 @@ class Match(private val solutions: IndexedSeq[util.AbstractMap.SimpleEntry[Int, 
   }
 
   private def prepareInvokers(): Unit = {
-    val root = pipePathRoot + matchReport.matchID
-    invokers = Array[Invoker](solutions.length + 1)
+    val root = pipePathRoot + matchReport.matchId
+    invokers = new Array[Invoker](solutions.length + 1)
     for (i <- solutions.indices) {
       invokers(i) = new Invoker(solutions(i).getValue.path, Seq())
       initInvokerInOutNames(invokers(i), root)
@@ -30,12 +30,11 @@ class Match(private val solutions: IndexedSeq[util.AbstractMap.SimpleEntry[Int, 
   }
 
   private def prepareInteractor(root: String): Unit = {
-    val argv = Seq[String](solutions.length)
-    for (i <- 0 until invokers.length - 1) {
-      argv(i) = invokers(i).stdin + ":" + invokers(i).stdout
-    }
+    val argv = List.tabulate(invokers.length - 1)(i =>
+      invokers(i).stdin + ":" + invokers(i).stdout
+    )
 
-    val interactor = new Invoker(game.interactorPath, argv)
+    val interactor = new Invoker(game.getInteractorPath(), argv)
     initInvokerInOutNames(interactor, root)
     invokers(solutions.length) = interactor
   }

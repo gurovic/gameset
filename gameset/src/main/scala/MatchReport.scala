@@ -1,9 +1,9 @@
-class MatchReport () {
+class MatchReport() {
 
-  Long MatchId;
-  Map[Long,Int] SolutionScores;
-  Boolean PlacesOnly;
+  var matchId: Long = _
+  var solutionScores: Map[Long, Int] = _
+  var PlacesOnly: Boolean = _
 
-  Boolean ErrorCode;
-  List[Int] ErrorSolutions;
+  var ErrorCode: Boolean = _
+  var ErrorSolutions: List[Int] = _
 }
