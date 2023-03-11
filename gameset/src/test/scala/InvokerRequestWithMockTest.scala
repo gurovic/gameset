@@ -1,12 +1,18 @@
+import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
+import org.scalatestplus.mockito.MockitoSugar
 
-class InvokerRequestTest extends AnyFunSuite with BeforeAndAfter {
+import scala.language.postfixOps
 
+class InvokerRequestWithMockTest extends AnyFunSuite with BeforeAndAfter with MockitoSugar {
+
+  private val invoker = mock[Invoker]
+  when(invoker.state)  thenReturn InvokerCreated()
   var invoker_request: InvokerRequest = _
 
   before {
-    val invokers = Array(new Invoker("3", Seq("3")), new Invoker("2", Seq("2")), new Invoker("1", Seq("1")))
+    val invokers = Array(invoker, invoker, invoker)
 
     def callback(): Unit = {}
 
