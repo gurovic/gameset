@@ -1,97 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Diagram>
   <ID>JAVA</ID>
-  <OriginalElement>C:/Users/Вадим Камалов/gameset/UMLDiagramsJava/src</OriginalElement>
+  <OriginalElement />
   <nodes>
-    <node x="-130.0" y="75.0">Invoker</node>
-    <node x="246.99999999999994" y="75.0">Solution</node>
-    <node x="711.0" y="75.0">TournamentSystem</node>
-    <node x="782.0" y="666.0">Pair</node>
-    <node x="782.875" y="299.0">Tournament</node>
-    <node x="-121.0" y="928.0">InvokerReport</node>
-    <node x="-1.0" y="310.0">Match</node>
-    <node x="371.875" y="299.0">TournamentSystemRoundRobin</node>
-    <node x="-10.0" y="-15.0">MatchReport</node>
-    <node x="120.0" y="666.0">MatchManager</node>
-    <node x="600.0" y="75.0">Game</node>
-    <node x="438.0" y="666.0">InvokerPool</node>
-    <node x="1043.0" y="7.0">TournamentStatus</node>
-    <node x="374.0" y="75.0">MatchFinishedObserver</node>
-    <node x="-130.0" y="666.0">ProcessStatus</node>
+    <node x="1534.75" y="-98.0">TournamentStatus</node>
+    <node x="972.75" y="-28.0">TournamentSystem</node>
+    <node x="856.75" y="-28.0">Game</node>
+    <node x="205.0" y="222.5">Match</node>
+    <node x="599.75" y="-28.0">MatchFinishedObserver</node>
+    <node x="111.0" y="-28.0">Invoker</node>
+    <node x="1390.75" y="-28.0">Solution</node>
+    <node x="111.0" y="589.0">ProcessStatus</node>
+    <node x="767.0" y="589.0">InvokerPool</node>
+    <node x="-130.0" y="829.5">InvokerReport</node>
+    <node x="1167.0" y="589.0">Pair</node>
+    <node x="638.9510869565217" y="211.0">TournamentSystemRoundRobin</node>
+    <node x="1243.3260869565217" y="211.0">Tournament</node>
+    <node x="248.0" y="-122.0">MatchReport</node>
+    <node x="410.0" y="589.0">MatchManager</node>
   </nodes>
   <notes />
   <edges>
     <edge source="TournamentSystemRoundRobin" target="MatchFinishedObserver" relationship="REALIZATION">
-      <point x="97.75" y="-161.0" />
-      <point x="665.125" y="279.0" />
-      <point x="639.2282608695651" y="279.0" />
-      <point x="639.2282608695651" y="239.0" />
-      <point x="528.5" y="239.0" />
-      <point x="51.5" y="27.0" />
+      <point x="-123.0" y="-166.5" />
+      <point x="761.9510869565217" y="191.0" />
+      <point x="818.3369565217392" y="191.0" />
+      <point x="818.3369565217392" y="151.0" />
+      <point x="777.5" y="151.0" />
+      <point x="59.25" y="27.5" />
     </edge>
     <edge source="Match" target="MatchFinishedObserver" relationship="TO_ONE">
-      <point x="-15.0" y="-150.0" />
-      <point x="149.5" y="239.0" />
-      <point x="477.0" y="239.0" />
-      <point x="-0.0" y="27.0" />
-    </edge>
-    <edge source="Match" target="Invoker" relationship="TO_MANY">
-      <point x="-165.5" y="-0.0" />
-      <point x="-80.0" y="460.0" />
-      <point x="-0.0" y="27.0" />
+      <point x="0.0" y="-155.0" />
+      <point x="407.5" y="171.0" />
+      <point x="659.0" y="171.0" />
+      <point x="-59.25" y="27.5" />
     </edge>
     <edge source="Match" target="Game" relationship="TO_ONE">
-      <point x="-0.0" y="-150.0" />
-      <point x="164.5" y="259.0" />
-      <point x="654.228" y="259.0" />
-      <point x="8.727999999999952" y="27.0" />
+      <point x="0.0" y="-155.0" />
+      <point x="407.5" y="181.0" />
+      <point x="1011.8260869565217" y="181.0" />
+      <point x="1011.8260869565217" y="141.0" />
+      <point x="904.75" y="141.0" />
+      <point x="0.0" y="27.5" />
+    </edge>
+    <edge source="Match" target="Invoker" relationship="TO_MANY">
+      <point x="0.0" y="-155.0" />
+      <point x="407.5" y="171.0" />
+      <point x="169.5" y="171.0" />
+      <point x="0.0" y="27.5" />
     </edge>
     <edge source="TournamentSystemRoundRobin" target="Game" relationship="TO_ONE">
-      <point x="-0.0" y="-161.0" />
-      <point x="567.375" y="259.0" />
-      <point x="654.228" y="259.0" />
-      <point x="8.727999999999952" y="27.0" />
+      <point x="123.0" y="-166.5" />
+      <point x="1007.9510869565217" y="191.0" />
+      <point x="1034.25" y="191.0" />
+      <point x="1034.25" y="171.0" />
+      <point x="1011.8260869565217" y="171.0" />
+      <point x="1011.8260869565217" y="141.0" />
+      <point x="904.75" y="141.0" />
+      <point x="0.0" y="27.5" />
     </edge>
     <edge source="TournamentSystemRoundRobin" target="TournamentSystem" relationship="REALIZATION">
-      <point x="97.75" y="-161.0" />
-      <point x="665.125" y="279.0" />
-      <point x="639.2282608695651" y="279.0" />
-      <point x="639.2282608695651" y="239.0" />
-      <point x="789.0" y="239.0" />
-      <point x="-78.0" y="27.0" />
+      <point x="-123.0" y="-166.5" />
+      <point x="761.9510869565217" y="191.0" />
+      <point x="818.3369565217392" y="191.0" />
+      <point x="818.3369565217392" y="151.0" />
+      <point x="1072.25" y="151.0" />
+      <point x="-99.5" y="27.5" />
     </edge>
     <edge source="Match" target="MatchReport" relationship="TO_ONE">
-      <point x="-56.0" y="-150.0" />
-      <point x="-0.0" y="117.0" />
+      <point x="0.0" y="-155.0" />
+      <point x="0.0" y="121.5" />
     </edge>
     <edge source="Tournament" target="TournamentStatus" relationship="TO_ONE">
-      <point x="128.0" y="-0.0" />
-      <point x="1158.0" y="460.0" />
-      <point x="-0.0" y="95.0" />
+      <point x="0.0" y="-166.5" />
+      <point x="1385.3260869565217" y="151.0" />
+      <point x="1672.75" y="151.0" />
+      <point x="0.0" y="97.5" />
     </edge>
     <edge source="Tournament" target="TournamentSystem" relationship="TO_ONE">
-      <point x="15.0" y="-161.0" />
-      <point x="58.875" y="27.0" />
+      <point x="0.0" y="-166.5" />
+      <point x="1385.3260869565217" y="151.0" />
+      <point x="1271.25" y="151.0" />
+      <point x="99.5" y="27.5" />
     </edge>
     <edge source="TournamentSystemRoundRobin" target="Solution" relationship="TO_MANY">
-      <point x="-15.0" y="-161.0" />
-      <point x="552.375" y="279.0" />
-      <point x="300.49999999999994" y="279.0" />
-      <point x="-0.0" y="27.0" />
+      <point x="123.0" y="-166.5" />
+      <point x="1007.9510869565217" y="191.0" />
+      <point x="1034.25" y="191.0" />
+      <point x="1034.25" y="181.0" />
+      <point x="1452.75" y="181.0" />
+      <point x="0.0" y="27.5" />
     </edge>
     <edge source="Tournament" target="Game" relationship="TO_ONE">
-      <point x="-0.0" y="-161.0" />
-      <point x="910.875" y="259.0" />
-      <point x="654.228" y="259.0" />
-      <point x="8.727999999999952" y="27.0" />
+      <point x="0.0" y="-166.5" />
+      <point x="1385.3260869565217" y="161.0" />
+      <point x="1011.8260869565217" y="161.0" />
+      <point x="1011.8260869565217" y="141.0" />
+      <point x="904.75" y="141.0" />
+      <point x="0.0" y="27.5" />
     </edge>
     <edge source="InvokerReport" target="ProcessStatus" relationship="TO_ONE">
-      <point x="-0.0" y="-83.0" />
-      <point x="-0.0" y="106.0" />
+      <point x="-0.0" y="-97.5" />
+      <point x="-28.0" y="698.0" />
+      <point x="-127.0" y="-0.0" />
     </edge>
   </edges>
-  <settings layout="Hierarchic" zoom="0.49867139061116034" showDependencies="true" x="581.5" y="549.5" />
-  <SelectedNodes />
+  <settings layout="Hierarchic" zoom="0.5598006644518272" showDependencies="true" x="-28.0" y="927.0" />
+  <SelectedNodes>
+    <node>InvokerReport</node>
+  </SelectedNodes>
   <Categories>
     <Category>Constructors</Category>
     <Category>Fields</Category>
