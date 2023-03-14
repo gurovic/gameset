@@ -15,7 +15,7 @@ public class Match {
 
     public void run(MatchFinishedObserver observer) {
         this.matchFinishedObserver = observer;
-        InvokerPull().getInstance().addToPool(
+        InvokerPool().getInstance().addToPool(
                 new InvokerRequest(
                         invokers,
                         createReport,
