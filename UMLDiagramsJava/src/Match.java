@@ -1,31 +1,32 @@
 import java.util.List;
 
 public class Match {
-    private int gameId;
-
     private List<Solution> solutions;
-
+    private Game game;
+    private MatchFinishedObserver matchFinishedObserver;
     private MatchReport report;
 
-    public Match(int gameId, List<Solution> solutions) {
-        this.gameId = gameId;
+    public Match(List<Solution> solutions, Game game) {
         this.solutions = solutions;
+        this.game = game;
     }
 
-    public void run(List<Invoker> invokers) {
-        createReport("path");
+    public void run(MatchFinishedObserver observer) {
+        this.matchFinishedObserver = observer;
+        new InvokerPull().getInstance().addToPool(
+                new InvokerRequest(
+                        prepareInvokers(),
+                        createReport,
+                        Some(setupInvokers)
+                )
+        );
     }
 
-    private void createReport(String interactorOutputPath) {
-        report = new MatchReport();
-        submitReportCreated();
+    private void setupInvokers() {
+
     }
 
-    private void submitReportCreated() {
-        System.out.println("Report created");
-    }
-
-    public MatchReport getReport() {
-        return report;
+    private void createReport() {
+        matchFinishedObserver.receive(report);
     }
 }
