@@ -4,7 +4,7 @@ class Match(private val solutions: List[util.AbstractMap.SimpleEntry[Int, Soluti
   private var matchFinishedObserver: MatchFinishedObserver = _
   private var invokers: Array[Invoker] = _
   private val matchReport: MatchReport = new MatchReport
-  private val pipePathRoot: String = "pipes/"
+  private val pipePathRoot: String = Config.files_storage_root + "/pipes/";
 
   def run(observer: MatchFinishedObserver): Unit = {
     matchFinishedObserver = observer
@@ -54,7 +54,7 @@ class Match(private val solutions: List[util.AbstractMap.SimpleEntry[Int, Soluti
   }
 
   private def createPipe(path: String): Unit = {
-    val cmds = Array("/bin/sh", "-c", String.format("\"mkfifo ~/%s && tail -f ~/%s | csh -s\"", path, path))
+    val cmds = Array("/usr/bin/env", "mkfifo", pipePathRoot + '/' + path);
     Runtime.getRuntime.exec(cmds)
   }
 
