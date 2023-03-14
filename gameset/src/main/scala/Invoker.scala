@@ -1,15 +1,11 @@
-import java.time.{Duration, Instant}
-import scala.sys.env
-import java.io.{File, FileWriter}
-import scala.util.Random
-import scala.sys.process._
+import java.io.File
 import java.lang.{Process, ProcessBuilder}
+import java.time.{Duration, Instant}
 import java.util.concurrent.TimeUnit
 import scala.io.Source
-
-class ProcessStatus extends Enumeration {
-  val OK, TL, WT, ML, RE = Value
-}
+import scala.sys.env
+import scala.sys.process._
+import scala.util.Random
 
 sealed trait InvokerState;
 case class InvokerCreated() extends InvokerState
@@ -41,7 +37,7 @@ class Invoker(path: String, argv: Seq[String]) {
     Seq("--rlimit_as", memoryLimitMb.toString)
 
 
-  def run(callback: InvokerReport => ()): Unit = { // TODO CompilerReport
+  def run(callback: InvokerReport => Unit): Unit = { // TODO CompilerReport
     val thread = new Thread {
       override def run(): Unit = {
         val logFile = "/tmp/invoker" + new Random(System.currentTimeMillis()).nextInt().toString + ".log"
