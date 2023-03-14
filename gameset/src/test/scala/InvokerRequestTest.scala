@@ -33,10 +33,10 @@ class InvokerRequestTest extends AnyFunSuite with BeforeAndAfter {
 
   test("Invokers created with the right state") {
 
-    assert(invoker_request.getInvokers(1).state === InvokerCreated())
+    assert(invoker_request.getInvokers()(1).state === InvokerCreated())
     def callback(invoker_report: InvokerReport): Unit = {
 
     }
-    invoker_request.getInvokers(0).run(callback)
+    invoker_request.getInvokers()(0).run(callback)
   }
 }
