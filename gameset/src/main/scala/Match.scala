@@ -1,6 +1,6 @@
 import java.util
 
-class Match(private val solutions: List[util.AbstractMap.SimpleEntry[Int, Solution]], private val game: Game) {
+class Match(private val solutions: List[MutablePair[Int, Solution]], private val game: Game) {
   private var matchFinishedObserver: MatchFinishedObserver = _
   private var invokers: Array[Invoker] = _
   private val matchReport: MatchReport = new MatchReport
@@ -22,7 +22,7 @@ class Match(private val solutions: List[util.AbstractMap.SimpleEntry[Int, Soluti
     val root = pipePathRoot + matchReport.matchId
     invokers = new Array[Invoker](solutions.length + 1)
     for (i <- solutions.indices) {
-      invokers(i) = new Invoker(solutions(i).getValue.path, Seq())
+      invokers(i) = new Invoker(solutions(i).value.path, Seq())
       initInvokerInOutNames(invokers(i), root)
     }
 
