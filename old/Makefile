@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++20 -Wall -g
+CXXFLAGS = -std=c++20 -Wall -g #-O3 -Wextra -Werror -pedantic -Wno-unused-result -Wno-unused-function -Wno-unused-variable -Wno-unused-but-set-variable -Wno-sign-compare -Wno-maybe-uninitialized -Wno-unknown-pragmas -Wno-psabi -Wno-attributes -Wno-unknown-warning-option -Wno-ignored-attributes
 
 DEPS = interactor_lib/interactor_lib.h
 SRC_DIR = example_game
@@ -13,7 +13,7 @@ $(TARGETS): $(patsubst %,$(SRC_DIR)/%.cpp,$(TARGETS)) $(DEPS)
 	$(CXX) $(SRC_DIR)/$@.cpp -o $@ $(CXXFLAGS)
 
 $(PIPES):
-	if [ ! -p $@ ]; then mkfifo $@; fi;
+	if [ ! -p $@ ]; then mkfifo -m a=rw $@; fi;
 
 .PHONY: run
 run: $(TARGETS)
