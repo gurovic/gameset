@@ -43,14 +43,12 @@ class Match(private val solutions: List[Solution], private val game: Game) {
     for (invoker <- invokers) {
       createPipe(invoker.stdin.get)
       createPipe(invoker.stdout.get)
-      createPipe(invoker.stderr.get)
     }
   }
 
   private def initInvokerInOutNames(invoker: Invoker, root: String): Unit = {
     invoker.stdin = Option(root + "_in" + "_inter" + ".pipe")
     invoker.stdout = Option(root + "_out" + "_inter" + ".pipe")
-    invoker.stderr = Option(root + "_err" + "_inter" + ".pipe")
   }
 
   private def createPipe(path: String): Unit = {
