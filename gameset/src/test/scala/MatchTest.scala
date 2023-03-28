@@ -1,27 +1,32 @@
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
-// интеграционные без моков
-
 class MatchTest extends AnyFunSuite with BeforeAndAfter {
 
-  var match_: Match = _
-  var observer: MatchFinishedObserver = _
-  var invoker: Invoker = _
-  var path: String = _
+  before {
+    var match_: Match = new Match()
 
-  before {}
+    var observer: MatchFinishedObserver = _
+    val invokers = Array(new Invoker("3", Seq("3")), new Invoker("2", Seq("2")), new Invoker("1", Seq("1")))
+    val roots = Array(new String(""), new String("test"), new String("test1/test2"))
+    val paths = Array(new String(""), new String("test"), new String("test1/test2"))
+  }
+
+  test("Match constructor") {
+  }
 
   test("run") {
     match_.run(observer)
   }
 
   test("prepareInvokers") {
-    match_.prepareInvokers(path)
+    match_.prepareInvokers()
   }
 
   test("prepareInteractor") {
-    match_.prepareInteractor(path)
+    for (i <- 0 to 2) {
+      match_.prepareInteractor(roots[i])
+    }
   }
 
   test("setupInvokers") {
@@ -29,11 +34,15 @@ class MatchTest extends AnyFunSuite with BeforeAndAfter {
   }
 
   test("initInvokerInOutNames") {
-    match_.initInvokerInOutNames(invoker, path)
+    for (i <- List(0, 2); j <- List(0, 2)) {
+      match_.initInvokerInOutNames(invokers[i], root[j])
+    }
   }
 
   test("createPipe") {
-    match_.createPipe(path)
+    for (i <- 0 to 2) {
+      match_.createPipe(paths[i])
+    }
   }
 
   test("createReport") {
