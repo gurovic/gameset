@@ -35,7 +35,7 @@ class TournamentSystemRoundRobin extends TournamentSystem with MatchFinishedObse
     } yield {
       val solution1 = this.solutionGroups(i)(j).key
       val solution2 = this.solutionGroups(j)(i).key
-      new Match(List(MutablePair(i, solution1), MutablePair(j, solution2)), this.game)
+      new Match(List(solution1, solution2), this.game)
     }
   }
 
