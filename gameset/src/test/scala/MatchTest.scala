@@ -20,7 +20,6 @@ package object testingUtils {
     var parent = Paths.get(filename).getParent
     // this refuses to delete non-empty directories
     while (parent != null && new File(parent.toString).delete()) {
-      System.err.println(parent)
       parent = parent.getParent
     }
   }

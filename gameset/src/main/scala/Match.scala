@@ -56,7 +56,6 @@ class Match(private val solutions: List[Solution], private val game: Game) {
   }
 
   private def createPipe(path: String): Unit = {
-    System.out.println(path)
     val parent = Paths.get(path).getParent
     if (parent != null) {
       Files.createDirectories(parent)
