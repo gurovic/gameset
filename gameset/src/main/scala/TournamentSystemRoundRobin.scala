@@ -64,6 +64,7 @@ class TournamentSystemRoundRobin extends TournamentSystem with MatchFinishedObse
   private def getWinnerIndex(matchReport: MatchReport): Int = {
     if (matchReport.solutionScores(0) > matchReport.solutionScores(1)) 0 else 1
   }
+
   private def getLoserIndex(matchReport: MatchReport): Int = {
     if (matchReport.solutionScores(0) > matchReport.solutionScores(1)) 1 else 0
   }

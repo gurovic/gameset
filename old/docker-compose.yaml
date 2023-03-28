@@ -3,7 +3,7 @@ services:
     container_name: gameset
     restart: always
     build:
-      dockerfile: Dockerfile
+      dockerfile: play.dockerfile
       context: .
     env_file:
       - .env

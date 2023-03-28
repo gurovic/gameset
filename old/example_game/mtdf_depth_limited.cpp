@@ -50,6 +50,9 @@ int CacheCutoffs_mtdf = 0;
 int CachePuts_mtdf = 0;
 int MaximumDepth_mtdf = 0;
 int StateCacheHits_mtdf = 0;
+int player;
+int depth = 0;
+int res = 0;
 Move bestMove_mtdf;
 
 int GameBoard[15][15] = {
@@ -691,38 +694,49 @@ Move iterative_mtdf(int depth) {
     return bestMove_mtdf;
 }
 
+// returns true if break
+bool set_opponent_move_or_break() {
+    int x, y;
+    cin >> x >> y;
+    if (x == -1 && y == -1)
+        return true;
+    GameBoard[x][y] = -player;
+    return false;
+}
 
-int main()
-{
+void set_my_move() {
+    res = negamax(GameBoard, player, depth, numeric_limits<int>::min() + 1, numeric_limits<int>::max() - 1,
+                  hash_board(GameBoard) - 1, Get_restrictions(GameBoard), 0, 0);
+    bestMove_mtdf = iterative_mtdf(depth);
+    Cache_mtdf.clear();
+    StateCache_mtdf.clear();
+    cout << bestMove_mtdf.i << " " << bestMove_mtdf.j << endl;
+    GameBoard[bestMove_mtdf.i][bestMove_mtdf.j] = player;
+}
+
+int main() {
     MaximumDepth_mtdf = 4;
-    int depth = 4;
+    depth = 4;
 
-    int player = 1;
+    player = 1;
+    cin >> player;
+
     Table_init();
-    int res = 0;
     //std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-    while(true) {
-        int x,y;
-        cin >> x >> y;
-        if(x == -1 && y == -1)break;
-        GameBoard[x][y] = -player;
-        res = negamax(GameBoard, player, depth, numeric_limits<int>::min() + 1, numeric_limits<int>::max() - 1,
-                          hash_board(GameBoard) - 1, Get_restrictions(GameBoard), 0, 0);
-        bestMove_mtdf = iterative_mtdf(depth);
-        Cache_mtdf.clear();
-        StateCache_mtdf.clear();
-        cout << bestMove_mtdf.i << " " << bestMove_mtdf.j << endl;
-        GameBoard[bestMove_mtdf.i][bestMove_mtdf.j] = player;
 
-        /*std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-        td::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
-        cout << "fc: " << fc << endl;
-        cout << "CacheHits: " << CacheHits_mtdf << endl;
-        cout << "CacheCutoffs: " << CacheCutoffs_mtdf << endl;
-        cout << "CachePuts: " << CachePuts_mtdf << endl;
-        cout << "StateCacheHits: " << StateCacheHits_mtdf << endl;
-        cout << "StateCachePuts: " << StateCachePuts_mtdf << endl;*/
-        //if(abs(res) >= 100000){cout << -1 << -1 << endl;break;}
+    std::cerr << "mtdf is " << player << endl;
+    if (player == -1) {
+        while (true) {
+            if (set_opponent_move_or_break())
+                break;
+            set_my_move();
+        }
+    } else {
+        while (true) {
+            set_my_move();
+            if (set_opponent_move_or_break())
+                break;
+        }
     }
     system("pause");
     return 0;
