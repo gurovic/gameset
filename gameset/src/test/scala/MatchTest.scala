@@ -35,7 +35,7 @@ class MatchTest extends AnyFunSuite with BeforeAndAfter {
 
   test("initInvokerInOutNames") {
     for (i <- List(0, 2); j <- List(0, 2)) {
-      match_.initInvokerInOutNames(invokers[i], root[j])
+      match_.initInvokerInOutNames(invokers[i], roots[j])
     }
   }
 
