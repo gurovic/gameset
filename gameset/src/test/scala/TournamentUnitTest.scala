@@ -1,14 +1,30 @@
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.doNothing
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
+import org.scalatestplus.mockito.MockitoSugar
 
 import java.lang.reflect.Field
 
-class TournamentIntegrationTest extends AnyFunSuite with BeforeAndAfter {
-  var tournament: Tournament = _
-  val solutionLimit = 2
+class TournamentUnitTest extends AnyFunSuite with BeforeAndAfter with MockitoSugar {
+  private var tournament: Tournament = _
+  private val solutionLimit = 2
+
   before {
-    tournament = new Tournament(new Game())
+    val tournamentSystem = mock[TournamentSystem]
+    tournament = new Tournament(
+      "Test tour",
+      new Game(),
+      tournamentSystem,
+      solutionLimit
+    )
     tournament.solutionsLimit = solutionLimit
+
+    doNothing().
+    when(tournamentSystem).startTesting(
+      any[List[Solution]],
+      any[Game],
+      any[java.util.function.Function[List[MatchReport], _]])
   }
 
   test("Tournament constructor") {
@@ -38,22 +54,21 @@ class TournamentIntegrationTest extends AnyFunSuite with BeforeAndAfter {
 
   test("Adding solutions to opened tournament") {
     tournament.open()
-    val solution0 = new Solution()
-    val solution1 = new Solution()
-    tournament.addSolution(solution0)
-    tournament.addSolution(solution1)
+    val solutions = List(new Solution(), new Solution())
+    for (sol <- solutions) {
+      tournament.addSolution(sol)
+    }
 
     val solutionsField: Field = tournament.getClass.getDeclaredField("solutions")
     solutionsField.setAccessible(true)
     val tourSolutions = solutionsField.get(tournament).asInstanceOf[List[Solution]]
-    assert(tourSolutions(0) == solution0)
-    assert(tourSolutions(1) == solution1)
+    assert(tourSolutions == solutions)
   }
 
   test("Closing tournament (start testing)") {
     tournament.open()
-    tournament.addSolution(new Solution())
-    tournament.addSolution(new Solution())
+    val solutions = List(new Solution(), new Solution())
+    solutions.foreach(_ => tournament.addSolution(_))
 
     val start = System.currentTimeMillis()
     tournament.close()
