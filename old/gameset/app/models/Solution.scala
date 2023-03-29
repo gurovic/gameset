@@ -10,7 +10,7 @@ import slick.jdbc.PostgresProfile.api._
 import slick.lifted.Tag
 
 case class Solution(id: Long, gameID: Long) {
-  def path = s"../data/games/${gameID}/user-solutions/${id}"
+  def path = s"../data/games/${gameID}/user-solutions/${id}.cpp"
 }
 
 class SolutionsTable(tag: Tag) extends Table[Solution](tag, "solutions") {

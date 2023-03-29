@@ -39,7 +39,7 @@ class SolutionsController @Inject()(val repo: SolutionsRepository, val controlle
       .map { solutionFile =>
         // only get the last part of the filename
         // otherwise someone can send a path like ../../tmp/foo/bar.txt to write to other files on the system
-        val filename = Paths.get(solutionFile.filename).getFileName
+
 
         if (solutionFile.fileSize > 1024 * 1024) {
           println("File too large")
@@ -50,11 +50,11 @@ class SolutionsController @Inject()(val repo: SolutionsRepository, val controlle
             val potentialPath = Paths.get(solution.path)
 
             if (!potentialPath.toFile.exists()) {
-              Files.createDirectories(potentialPath)
+              Files.createDirectories(potentialPath.getParent)
               println("Created directory")
             }
 
-            solutionFile.ref.copyTo(Paths.get(s"$potentialPath/$filename"), replace = true)
+            solutionFile.ref.copyTo(Paths.get(s"$potentialPath"), replace = true)
 
             Redirect(routes.SolutionsController.viewSolution(gameID, solution.id)).flashing("success" -> "File uploaded")
         }
