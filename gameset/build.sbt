@@ -6,3 +6,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "gameset"
   )
+
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.15" % "test"
+libraryDependencies += "org.scalatestplus" %% "mockito-3-4" % "3.2.10.0" % "test"
+
