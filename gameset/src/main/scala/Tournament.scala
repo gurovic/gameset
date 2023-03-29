@@ -1,21 +1,25 @@
-import java.util.Date
+import java.util.{Calendar, Date}
 import scala.collection.mutable.ArrayBuffer
 
 
-class Tournament(private val game : Game) {
-  private var name: String = _
-  var status = TournamentStatus.Pending
-  private var tournamentSystem: TournamentSystem = _
+class Tournament(
+                  private var name: String,
+                  private val game: Game,
+                  private val tournamentSystem: TournamentSystem,
+                  var solutionsLimit: Int
+                ) {
+  var status: TournamentStatus.Value = TournamentStatus.Pending
   private var solutions: List[Solution] = _
   var openingTime: Date = _
   var closeTime: Date = _
-  var solutionsLimit: Int = _
 
   def open(): Unit = {
     if (status != TournamentStatus.Pending) {
       throw new IllegalStateException("Tournament is not pending")
     }
 
+    solutions = List()
+    openingTime = Calendar.getInstance().getTime
     status = TournamentStatus.Opened
   }
 
@@ -24,6 +28,7 @@ class Tournament(private val game : Game) {
       throw new IllegalStateException("Only opened tournament can be closed")
     }
     status = TournamentStatus.Testing
+    closeTime = Calendar.getInstance().getTime
     tournamentSystem.startTesting(solutions, game, conclude)
   }
 
