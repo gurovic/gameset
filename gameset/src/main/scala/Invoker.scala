@@ -37,7 +37,7 @@ class Invoker(path: String, argv: Seq[String]) {
     Seq("--rlimit_as", memoryLimitMb.toString)
 
 
-  def run(callback: InvokerReport => Unit): Unit = { // TODO CompilerReport
+  def run(observer: InvokerObserver, request_id: String): Unit = { // TODO CompilerReport
     val thread = new Thread {
       override def run(): Unit = {
         val logFile = "/tmp/invoker" + new Random(System.currentTimeMillis()).nextInt().toString + ".log"
@@ -71,7 +71,8 @@ class Invoker(path: String, argv: Seq[String]) {
             )
 
           state = InvokerFinished(report)
-          callback(report)
+
+          observer.recieve(request_id)
         } finally {
           log.close()
           new File(logFile).delete()
