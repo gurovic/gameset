@@ -1,46 +1,37 @@
+import org.mockito.Mockito.when
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
+import org.scalatestplus.mockito.MockitoSugar
+import scala.language.postfixOps
 
 import scala.collection.immutable.Seq
 
-class InvokerPoolTest {
+class InvokerPoolTest extends AnyFunSuite with BeforeAndAfter with MockitoSugar {
+
+  private val invoker = mock[Invoker]
+  when(invoker.state) thenReturn InvokerCreated()
   var invoker_request: InvokerRequest = _
 
+  var invoker_pool: InvokerPool = _
+
+
   before {
-    val invokers = Array(new Invoker("3", Seq("3")), new Invoker("2", Seq("2")), new Invoker("1", Seq("1")))
+    val invokers = Array(invoker, invoker, invoker)
 
     def callback(): Unit = {}
 
     def setup(): Unit = {}
 
     invoker_request = new InvokerRequest(invokers, callback, Some(setup))
-  }
 
-  test("InvokerRequest constructor") {
-
-  }
-
-  test("getInvokersNum") {
-
-    assert(invoker_request.getInvokersNum === 3)
+    invoker_pool = new InvokerPool(20)
   }
 
 
-  test("getInvokers") {
+  test("AddRequest") {
 
-    assert(invoker_request.getInvokers.length === 3)
-
+    assert(invoker_pool.addToQueue(invoker_request) === 3)
   }
 
-  test("Invokers created with the right state") {
-
-    assert(invoker_request.getInvokers()(1).state === InvokerCreated())
-
-    def callback(invoker_report: InvokerReport): Unit = {
-
-    }
-
-    invoker_request.getInvokers()(0).run(callback)
-  }
 
 }
