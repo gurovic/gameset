@@ -6,7 +6,8 @@ class Tournament(
                   private var name: String,
                   private val game: Game,
                   private val tournamentSystem: TournamentSystem,
-                  var solutionsLimit: Int
+                  var solutionsLimit: Int,
+                  private val observer: TournamentFinishedObserver
                 ) {
   var status: TournamentStatus.Value = TournamentStatus.Pending
   private var solutions: List[Solution] = _
@@ -34,6 +35,8 @@ class Tournament(
 
   def conclude(matchReports: List[MatchReport]): Unit = {
     // TODO
+    status = TournamentStatus.Finished
+    observer.receiveTournamentFinished()
   }
 
   def addSolution(solution: Solution): Boolean = {
