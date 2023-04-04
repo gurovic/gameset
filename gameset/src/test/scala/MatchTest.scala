@@ -1,51 +1,32 @@
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
+import java.util
+
 class MatchTest extends AnyFunSuite with BeforeAndAfter {
 
-  before {
-    var match_: Match = new Match()
+  var observer: MatchFinishedObserver = _
+  var game: Game = _
+  var testSolutionLists: Array[List[util.AbstractMap.SimpleEntry[Int, Solution]]] = _
 
-    var observer: MatchFinishedObserver = _
-    val invokers = Array(new Invoker("3", Seq("3")), new Invoker("2", Seq("2")), new Invoker("1", Seq("1")))
-    val roots = Array(new String(""), new String("test"), new String("test1/test2"))
-    val paths = Array(new String(""), new String("test"), new String("test1/test2"))
+  before {
+    testSolutionLists = Array(
+      List((0, new Solution())),
+      List((0, new Solution()), (1, new Solution()), (2, new Solution())),
+      List((1000000, new Solution()))
+    )
   }
 
-  test("Match constructor") {
+  test("match constructor") {
+    for (i <- 0 to 2) {
+      val match_ : Match = new Match(testSolutionLists(i), game)
+    }
   }
 
   test("run") {
-    match_.run(observer)
-  }
-
-  test("prepareInvokers") {
-    match_.prepareInvokers()
-  }
-
-  test("prepareInteractor") {
     for (i <- 0 to 2) {
-      match_.prepareInteractor(roots[i])
+      val match_ : Match = new Match(testSolutionLists(i), game)
+      match_.run(observer)
     }
-  }
-
-  test("setupInvokers") {
-    match_.prepareInvokers()
-  }
-
-  test("initInvokerInOutNames") {
-    for (i <- List(0, 2); j <- List(0, 2)) {
-      match_.initInvokerInOutNames(invokers[i], roots[j])
-    }
-  }
-
-  test("createPipe") {
-    for (i <- 0 to 2) {
-      match_.createPipe(paths[i])
-    }
-  }
-
-  test("createReport") {
-    match_.createReport()
   }
 }
