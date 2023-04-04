@@ -1,14 +1,14 @@
 import  scala.collection.mutable.PriorityQueue
 import scala.collection.mutable.Map
 import scala.util.Random
-object InvokerPool extends InvokerObserver {
+class InvokerPool(private val max_invokers: Int) extends InvokerObserver  {
 
-  val max_invokers = 10
+
   private var busy_invokers = 0;
 
 
 
-  private var request_queue = PriorityQueue[(Int, InvokerRequest)]()(Ordering.by )
+  private var request_queue = PriorityQueue[(Int, InvokerRequest)]()(Ordering.by(_._1))
 
 
   private var executed_invoker_requests = Map[String,(Int, InvokerRequest)]();
@@ -34,7 +34,7 @@ object InvokerPool extends InvokerObserver {
     var invokers_list = invoker_request.getInvokers();
     var request_id = Random.between(100000,999999).toString;
 
-    executed_invoker_requests = executed_invoker_requests + ( request_id -> invokers_num);
+    executed_invoker_requests = executed_invoker_requests + ( request_id -> (invokers_num, invoker_request));
 
     for (invoker <- invokers_list){
       // TODO fix me!
@@ -49,8 +49,6 @@ object InvokerPool extends InvokerObserver {
     invokers_left -= 1;
     if (invokers_left == 0) {
       invoker_request.callback()
-    } else {
-      executed_invoker_requests = executed_invoker_requests + (request_id -> invokers_left)
     }
     busy_invokers += 1;
     waitForFreeSpace();
