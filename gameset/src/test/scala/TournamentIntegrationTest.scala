@@ -1,7 +1,8 @@
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 
-class TournamentIntegrationTest extends AnyFunSuite with BeforeAndAfter {
+class TournamentIntegrationTest extends AnyFunSuite with BeforeAndAfter with TournamentFinishedObserver {
+  private var tournament: Tournament = _
   test("Tournament execution") {
     val game = new Game()
     val testFilesPath = System.getProperty("user.dir") + "/src/test/scala/test_game/"
@@ -11,7 +12,8 @@ class TournamentIntegrationTest extends AnyFunSuite with BeforeAndAfter {
       "Test tour",
       game,
       new TournamentSystemRoundRobin(),
-      2
+      2,
+      this
     )
     val solution1 = new Solution()
     solution1.path = new Compiler().compile(testFilesPath + "mtdf_depth_limited.cpp")
@@ -22,5 +24,9 @@ class TournamentIntegrationTest extends AnyFunSuite with BeforeAndAfter {
     tournament.addSolution(solution1)
     tournament.addSolution(solution2)
     tournament.close()
+  }
+
+  override def receiveTournamentFinished(): Unit = {
+    assert(tournament.status == TournamentStatus.Finished)
   }
 }
