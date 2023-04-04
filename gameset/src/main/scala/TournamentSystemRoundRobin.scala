@@ -3,10 +3,10 @@ import scala.collection.mutable.ArrayBuffer
 
 class TournamentSystemRoundRobin extends TournamentSystem with MatchFinishedObserver {
   private var game: Game = _
-  private var matchesCompleted = 0
-  private var matchesNumber = 0
+  var matchesCompleted = 0
+  var matchesNumber = 0
   private var solutions: List[Solution] = _
-  private var matchReports: ArrayBuffer[MatchReport] = _
+  var matchReports: ArrayBuffer[MatchReport] = _
   private var solutionGroups: List[List[MutablePair[Solution, Integer]]] = _
 
   override def startTesting(solutions: List[Solution], game: Game, callback: Function[List[MatchReport], _]): Unit = {
