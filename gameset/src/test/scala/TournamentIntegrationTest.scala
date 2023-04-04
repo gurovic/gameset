@@ -5,8 +5,7 @@ class TournamentIntegrationTest extends AnyFunSuite with BeforeAndAfter with Tou
   private var tournament: Tournament = _
   test("Tournament execution") {
     val game = new Game()
-    val testFilesPath = System.getProperty("user.dir") + "/src/test/scala/test_game/"
-    game.interactorPath = new Compiler().compile(testFilesPath + "interactor.cpp")
+    game.interactorPath = Config.example_game_root + "/interactor"
 
     val tournament = new Tournament(
       "Test tour",
@@ -16,9 +15,9 @@ class TournamentIntegrationTest extends AnyFunSuite with BeforeAndAfter with Tou
       this
     )
     val solution1 = new Solution()
-    solution1.path = new Compiler().compile(testFilesPath + "mtdf_depth_limited.cpp")
+    solution1.path = Config.exe_test_files_root + "/mtdf"
     val solution2 = new Solution()
-    solution2.path = new Compiler().compile(testFilesPath + "negamax_depth_limited.cpp")
+    solution2.path = Config.exe_test_files_root + "/negamax"
 
     tournament.open()
     tournament.addSolution(solution1)
