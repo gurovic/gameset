@@ -1,19 +1,17 @@
 import  scala.collection.mutable.PriorityQueue
 import scala.collection.mutable.Map
 import scala.util.Random
-object InvokerPool{
+object InvokerPool extends InvokerObserver {
 
   val max_invokers = 10
   private var busy_invokers = 0;
 
 
 
-  private var request_queue = PriorityQueue[(Int, InvokerRequest)]()(Ordering.by {
-    case (fst, snd) => fst
-  })
+  private var request_queue = PriorityQueue[(Int, InvokerRequest)]()(Ordering.by )
 
 
-  private var executed_invoker_requests = Map[String,Int]();
+  private var executed_invoker_requests = Map[String,(Int, InvokerRequest)]();
 
   def waitForFreeSpace(): Unit = {
     var invokers_num = request_queue.head._2.getInvokersNum();
@@ -40,20 +38,22 @@ object InvokerPool{
 
     for (invoker <- invokers_list){
       // TODO fix me!
-      //invoker.run(freeInvokerSpace);
+      invoker.run( this, request_id);
     }
   }
 
-  def freeInvokerSpace(request_id: String): Unit = {
-    var invokers_left = executed_invoker_requests.get(request_id).get
+
+  override def recieve(request_id: String): Unit = {
+    var invokers_left = executed_invoker_requests.get(request_id).get._1;
+    var invoker_request: InvokerRequest = executed_invoker_requests.get(request_id).get._2;
     invokers_left -= 1;
-    if (invokers_left==0){
-      //тут должна быть какая-то функция, которая что-то делает после того как все инвокеры в реквесте закончат работу
-    }else {
+    if (invokers_left == 0) {
+      invoker_request.callback()
+    } else {
       executed_invoker_requests = executed_invoker_requests + (request_id -> invokers_left)
     }
     busy_invokers += 1;
     waitForFreeSpace();
-  }
 
+  }
 }
