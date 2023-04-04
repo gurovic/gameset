@@ -78,5 +78,6 @@ class Invoker(path: String, argv: Seq[String]) {
         }
       }
     }
+    thread.run();
   }
 }
