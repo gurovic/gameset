@@ -1,27 +1,42 @@
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{times, verify}
 import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.mockito.MockitoSugar
 
 class InvokerTest extends AnyFunSuite with BeforeAndAfter with MockitoSugar {
-  private val invoker_report = mock[InvokerReport]
   var invoker: Invoker = _
-  val callbackMock = mock[(InvokerReport) => Unit]
+  var callbackMock = mock[(InvokerReport) => Unit]
+  var path = System.getProperty("user.dir") + "\\data\\test\\hello_world"
+
   before {
-    invoker = new Invoker("/", Seq())
+    invoker = new Invoker(path, Seq())
+    invoker.wallTimeLimitMs = 200
+    callbackMock = mock[(InvokerReport) => Unit]
   }
 
   test("Invoker constructor") {
     assert(invoker.state === InvokerCreated())
   }
 
-  test("Check invoker running") {
+  test("Invoker.run") {
     invoker.run(callbackMock)
-    Thread.sleep(500)
+    Thread.sleep(300)
     assert(invoker.state.isInstanceOf[InvokerFinished])
   }
 
-  test("Check invoker callback") {
-    verify(callbackMock, times(1)).apply(invoker_report)
+  test("Invoker callback") {
+    invoker.run(callbackMock)
+    Thread.sleep(300)
+    verify(callbackMock, times(1)).apply(any[InvokerReport])
+  }
+
+  test("Time limit") {
+    path = System.getProperty("user.dir") + "\\data\\test\\time_limit"
+    invoker = new Invoker(path, Seq())
+    invoker.wallTimeLimitMs = 200
+    invoker.run(callbackMock)
+    Thread.sleep(300)
+    assert(invoker.state.isInstanceOf[InvokerFinished])
   }
 }
