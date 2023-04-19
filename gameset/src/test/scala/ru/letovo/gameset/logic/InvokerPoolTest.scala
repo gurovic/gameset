@@ -10,14 +10,15 @@ import scala.collection.immutable.Seq
 
 class InvokerPoolTest extends AnyFunSuite with BeforeAndAfter with MockitoSugar {
 
-  private val invoker = mock[Invoker]
-  when(invoker.state) thenReturn InvokerCreated()
+  var invoker: Invoker = _
   var invoker_request: InvokerRequest = _
-
-  var invoker_pool: InvokerPool = _
-
+  var callbackMock = mock[(InvokerReport) => Unit]
+  var path = System.getProperty("user.dir") + "/data/test/hello_world"
 
   before {
+    invoker = new Invoker(path, Seq())
+    invoker.wallTimeLimitMs = 200
+    callbackMock = mock[(InvokerReport) => Unit]
     val invokers = Array(invoker, invoker, invoker)
 
     def callback(): Unit = {}
@@ -25,14 +26,12 @@ class InvokerPoolTest extends AnyFunSuite with BeforeAndAfter with MockitoSugar 
     def setup(): Unit = {}
 
     invoker_request = new InvokerRequest(invokers, callback, Some(setup))
-
-    invoker_pool = new InvokerPool(20)
   }
 
 
   test("AddRequest") {
 
-    assert(invoker_pool.addToQueue(invoker_request) === 3)
+    assert(InvokerPool.addToQueue(invoker_request) === 3)
   }
 
 
