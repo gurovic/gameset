@@ -6,14 +6,15 @@ import java.util
 class MatchTest extends AnyFunSuite with BeforeAndAfter {
 
   var observer: MatchFinishedObserver = _
-  var game: Game = _
+  var game: Game = new Game()
   var testSolutionLists: Array[List[util.AbstractMap.SimpleEntry[Int, Solution]]] = _
 
   before {
     testSolutionLists = Array(
-      List((0, new Solution())),
-      List((0, new Solution()), (1, new Solution()), (2, new Solution())),
-      List((1000000, new Solution()))
+      List(new util.AbstractMap.SimpleEntry(0, new Solution())),
+      List(new util.AbstractMap.SimpleEntry(0, new Solution()), new util.AbstractMap.SimpleEntry(1, new Solution()),
+        new util.AbstractMap.SimpleEntry(2, new Solution())),
+      List(new util.AbstractMap.SimpleEntry(1000000, new Solution()))
     )
   }
 
