@@ -1,16 +1,20 @@
 package ru.letovo.gameset.web.models
 
 import play.api.db.slick.DatabaseConfigProvider
+import play.api.libs.json.Json
 import slick.jdbc.JdbcProfile
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
-
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.Tag
 
 case class Solution(id: Long, gameID: Long) {
-  def path = s"../data/games/${gameID}/user-solutions/${id}.cpp"
+  def path = s"../data/games/$gameID/user-solutions/$id.cpp"
+}
+
+object Solution {
+  implicit val solutionFormat = Json.format[Solution]
 }
 
 class SolutionsTable(tag: Tag) extends Table[Solution](tag, "solutions") {
@@ -23,13 +27,12 @@ class SolutionsTable(tag: Tag) extends Table[Solution](tag, "solutions") {
    * In this case, we are simply passing the ID and gameID parameters to the Solution case classes
    * apply and unapply methods.
    */
-  def * = (id, gameID) <> ((Solution.apply _).tupled, Solution.unapply)
+  def * = (ID, gameID) <> ((Solution.apply _).tupled, Solution.unapply)
 
   /** The ID column, which is the primary key, and auto incremented */
-  def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
+  def ID = column[Long]("id", O.PrimaryKey, O.AutoInc)
 
-  /** The name column */
-  def gameID = column[Long]("gameid")
+  def gameID = column[Long]("game_id")
 }
 
 /**
@@ -61,28 +64,21 @@ class SolutionsRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(im
    */
   def create(gameID: Long): Future[Solution] = db.run {
     // We create a projection of just the gameID column, since we're not inserting a value for the id column
-    (solution.map(p => (p.gameID))
+    (solution.map(s => s.gameID)
       // Now define it to return the id, because we want to know what id was generated for the person
-      returning solution.map(_.id)
+      returning solution.map(_.ID)
       // And we define a transformation for the returned value, which combines our original parameters with the
       // returned id
-      into ((nameAge, id) => Solution(id, nameAge))
-      // And finally, insert the person into the database
+      into ((gameID, id) => Solution(id, gameID))
+      // And finally, insert the solution into the database
       ) += gameID
   }
 
-  /**
-   * List all the people in the database.
-   */
   def list(): Future[Seq[Solution]] = db.run {
     solution.result
   }
 
   def getSolution(id: Long) = db.run {
-    solution.filter(_.id === id).result
+    solution.filter(_.ID === id).result
   }
-
-  /**
-   * Here we define the table. It will have a name of people
-   */
 }
