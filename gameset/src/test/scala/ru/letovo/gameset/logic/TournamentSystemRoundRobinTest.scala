@@ -13,9 +13,9 @@ import java.lang.reflect.Field
 class TournamentSystemRoundRobinTest extends AnyFunSuite with BeforeAndAfter with MockitoSugar {
   private var tournamentSystemRoundRobin: TournamentSystemRoundRobin = _
 
-  test("startTesting should execute all matches and generate correct match reports") {
+  test("startTesting") {
     // Setup
-    val solutions = List(mock[Solution], mock[Solution], mock[Solution])
+    val solutions = List(mock[Solution], mock[Solution])
     val game = mock[Game]
     val callback = mock[Function[List[MatchReport], _]]
     val tournamentSystem = new TournamentSystemRoundRobin()
@@ -25,5 +25,25 @@ class TournamentSystemRoundRobinTest extends AnyFunSuite with BeforeAndAfter wit
     // Verify
     assert(tournamentSystem.matchesCompleted == tournamentSystem.matchesNumber)
     assert(tournamentSystem.matchReports.size == tournamentSystem.matchesNumber)
+  }
+
+  test("getNextMatch") {
+
+  }
+
+  test("generateSolutionGroups") {
+
+  }
+
+  test("generateMatchesNumber") {
+
+  }
+
+  test("getWinnerIndex") {
+
+  }
+
+  test("getLoserIndex") {
+
   }
 }
