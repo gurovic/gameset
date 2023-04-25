@@ -8,6 +8,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "web",
     libraryDependencies ++= Seq(
+      "org.mindrot" % "jbcrypt" % "0.4",
       "com.typesafe.play" %% "play-slick" % "5.0.0",
       jdbc,
       guice,
