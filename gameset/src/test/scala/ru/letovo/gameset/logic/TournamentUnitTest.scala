@@ -1,3 +1,5 @@
+package ru.letovo.gameset.logic
+
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.doNothing
 import org.scalatest.BeforeAndAfter
