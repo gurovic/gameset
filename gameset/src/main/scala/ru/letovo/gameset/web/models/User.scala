@@ -33,32 +33,19 @@ class Users(tag: Tag) extends Table[User](tag, "users") {
 }
 
 @Singleton
-class VideosRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
-  // We want the JdbcProfile for this provider
+class UsersRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
   private val dbConfig = dbConfigProvider.get[JdbcProfile]
 
-  // These imports are important, the first one brings db into scope, which will let you do the actual db operations.
-  // The second one brings the Slick DSL into scope, which lets you define the table and other queries.
 
   import dbConfig._
   import profile.api._
 
-  /**
-   * The starting point for all queries on the videos table.
-   */
   private val users = TableQuery[Users]
 
-  /**
-   * Create a video with the given matchID and renderedAt.
-   *
-   * This is an asynchronous operation, it will return a future of the created video, which can be used to obtain the
-   * id for that video.
-   */
   def create(username: String, password: String): Future[User] = db.run {
     (users.map(user => (user.username, user.passwordHash))
       returning users.map(_.id)
       into ((result, id) => User(id, result._1, result._2, 0))
-      // And finally, insert the video into the database
       ) += (username, PasswordUtils.getPasswordHash(password))
   }
 
