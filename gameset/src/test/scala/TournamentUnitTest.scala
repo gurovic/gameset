@@ -16,7 +16,8 @@ class TournamentUnitTest extends AnyFunSuite with BeforeAndAfter with MockitoSug
       "Test tour",
       new Game(),
       tournamentSystem,
-      solutionLimit
+      solutionLimit,
+      mock[TournamentFinishedObserver]
     )
     tournament.solutionsLimit = solutionLimit
 
