@@ -4,7 +4,7 @@ import slick.jdbc.PostgresProfile.api._
 import slick.lifted.Tag
 import models._
 import ru.letovo.gameset.web.models.{Solution, SolutionsTable}
-//import ru.letovo.gameset.web.models.User
+import ru.letovo.gameset.web.models.{User, UsersTable}
 
 case class Game(id: Long,
                 name: String, // -> Path to binary
@@ -31,8 +31,8 @@ class GamesTable(tag: Tag) extends Table[Game](tag, "games") {
   def dumb_solutionID = column[Long]("dumb_solutionID")
 
   def dumb_solution = foreignKey("DUMB_SOLUTION", dumb_solutionID, TableQuery[SolutionsTable])(_.ID)
-  def authorID = column[Long]("author_id")
-//  def author = foreignKey("AUTHOR", author_ID, TableQuery[User])(_.id)
+  def authorID = column[Long]("authorid")
+  def author = foreignKey("AUTHOR", authorID, TableQuery[UsersTable])(_.id)
 
   def * = (id, name, interactor, rules, author_solutionID, dumb_solutionID, authorID) <> (Game.tupled, Game.unapply)
 }
