@@ -24,7 +24,7 @@ final case class User(id: Long, username: String, passwordHash: String, rating: 
   }
 }
 
-class Users(tag: Tag) extends Table[User](tag, "users") {
+class UsersTable(tag: Tag) extends Table[User](tag, "users") {
   def id = column[Long]("id")
   def username = column[String]("username")
   def passwordHash = column[String]("passwordHash")
@@ -40,7 +40,7 @@ class UsersRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implic
   import dbConfig._
   import profile.api._
 
-  private val users = TableQuery[Users]
+  private val users = TableQuery[UsersTable]
 
   def create(username: String, password: String): Future[User] = db.run {
     (users.map(user => (user.username, user.passwordHash))
