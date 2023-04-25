@@ -9,9 +9,11 @@ import scala.concurrent.{ExecutionContext, Future}
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.Tag
 
-case class MatchReport(matchId: Long, solutionScores: Map[Long, Int], PlacesOnly: Boolean, ErrorCode: Boolean, ErrorSolutions: List[Int]) {
-
-}
+case class MatchReport(matchId: Long,
+                       solutionScores: Map[Long, Int],
+                       PlacesOnly: Boolean,
+                       ErrorCode: Boolean,
+                       ErrorSolutions: List[Int])
 
 object MatchReport{
   implicit val reportformat = Json.format[MatchReport]
@@ -46,7 +48,7 @@ class MatchReportsTable(tag: Tag) extends Table[MatchReport](tag, "reports") {
  * @param dbConfigProvider The Play db config provider. Play will inject this for you.
  */
 @Singleton
-class SolutionsRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
+class MatchReportsRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) {
   // We want the JdbcProfile for this provider
   private val dbConfig = dbConfigProvider.get[JdbcProfile]
 
@@ -74,13 +76,6 @@ class SolutionsRepository @Inject()(dbConfigProvider: DatabaseConfigProvider)(im
       report.map(p=> (p.PlacesOnly)),
       report.map(p=> (p.ErrorCode)),
       report.map(p=> (p.ErrorSolutions))
-
-      // Now define it to return the id, because we want to know what id was generated for the person
-
-      // And we define a transformation for the returned value, which combines our original parameters with the
-      // returned id
-
-      // And finally, insert the person into the database
       )+= matchId
   }
 
