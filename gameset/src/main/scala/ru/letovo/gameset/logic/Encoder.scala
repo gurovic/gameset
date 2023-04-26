@@ -16,6 +16,6 @@ class Encoder() {
       targetPath
     ).!
 
-    new Video(matchId, RenderConfig, targetPath, System.currentTimeMillis())
+    new Video(RenderConfig, matchId, targetPath, System.currentTimeMillis())
   }
 }
