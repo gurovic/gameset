@@ -5,7 +5,7 @@ import ru.letovo.gameset.logic.RenderConfig
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.Tag
 
-case class Video(id: Long, matchID: Long, renderedAt: Long, config: RenderConfig)
+case class Video(id: Long, renderedAt: Long, config: RenderConfig)
 
 object Video {
   implicit val videoFormat = Json.format[Video]
@@ -19,17 +19,17 @@ class VideosTable(tag: Tag) extends Table[Video](tag, "videos") {
    * It defines how the columns are converted to and from the Video object.
    */
 
-  override def * = (id, matchID, renderedAt, (viewport, bitrate, compression)).shaped <> ( {
-    case (id, matchID, renderedAt, renderConfig) =>
-      Video(id, matchID, renderedAt, RenderConfig.tupled.apply(renderConfig))
+  override def * = (id,  renderedAt, (viewport, bitrate, compression)).shaped <> ( {
+    case (id,  renderedAt, renderConfig) =>
+      Video(id,  renderedAt, RenderConfig.tupled.apply(renderConfig))
   }, { v: Video =>
     def unpack(rc: RenderConfig) = RenderConfig.unapply(rc).get
 
-    Some((v.id, v.matchID, v.renderedAt, unpack(v.config)))
+    Some((v.id, v.renderedAt, unpack(v.config)))
   })
 
   /** The ID column, which is the primary key, and auto incremented */
-  def id: Rep[Long] = column[Long]("id", O.PrimaryKey, O.AutoInc)
+  def id: Rep[Long] = column[Long]("id", O.PrimaryKey)
 
   def matchID: Rep[Long] = column[Long]("match_id")
 

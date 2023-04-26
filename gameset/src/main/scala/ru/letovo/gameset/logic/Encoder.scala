@@ -1,5 +1,7 @@
 package ru.letovo.gameset.logic
 
+import ru.letovo.gameset.web.models.Video
+
 import scala.sys.process.stringSeqToProcess
 
 class Encoder() {
@@ -16,6 +18,6 @@ class Encoder() {
       targetPath
     ).!
 
-    new Video(RenderConfig, matchId, targetPath, System.currentTimeMillis())
+    Video(matchId, targetPath, System.currentTimeMillis(), config)
   }
 }
