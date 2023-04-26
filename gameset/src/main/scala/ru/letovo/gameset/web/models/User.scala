@@ -27,7 +27,7 @@ final case class User(id: Long, username: String, passwordHash: String, rating: 
 class UsersTable(tag: Tag) extends Table[User](tag, "users") {
   def id = column[Long]("id")
   def username = column[String]("username")
-  def passwordHash = column[String]("passwordHash")
+  def passwordHash = column[String]("passwordhash")
   def rating = column[Int]("rating", O.Default(0))
   def * = (id, username, passwordHash, rating) <> ((User.apply _).tupled, User.unapply)
 }
