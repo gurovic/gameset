@@ -1,9 +1,13 @@
 package models
 
+package ru.letovo.gameset.web.models
+
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.Tag
 import models._
+
 import ru.letovo.gameset.logic.{TournamentSystem, TournamentSystemRegistry}
+import ru.letovo.gameset.logic.{TournamentFinishedObserver, TournamentSystem, TournamentSystemRegistry}
 import ru.letovo.gameset.web.models.{User, UsersTable}
 
 case class Tournament(id: Long,
