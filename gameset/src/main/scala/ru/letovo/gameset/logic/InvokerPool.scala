@@ -4,12 +4,12 @@ import scala.collection.mutable.PriorityQueue
 import scala.collection.mutable.Map
 import scala.util.Random
 
-class InvokerPool(private val max_invokers: Int) extends InvokerObserver  {
+object InvokerPool extends InvokerObserver  {
 
 
   private var busy_invokers = 0;
 
-
+  private val max_invokers = 10;
 
   private var request_queue = PriorityQueue[(Int, InvokerRequest)]()(Ordering.by(_._1))
 
