@@ -63,9 +63,9 @@ int main(int argc, char **argv) {
     std::cout << "Using log file: " << sourceFilePath << std::endl;
     std::cout << "Using images directory: " << imagesDirPath << std::endl;
 
-    if (!std::filesystem::exists(imagesDirPath)) {
+    if (!std::__fs::filesystem::exists(imagesDirPath)) {
         std::cout << "Creating images directory: " << imagesDirPath << std::endl;
-        std::filesystem::create_directory(imagesDirPath);
+        std::__fs::filesystem::create_directory(imagesDirPath);
     }
 
     EasyBMP::Image img(WIDTH, HEIGHT, "base_image.bmp", blackColor);
@@ -90,19 +90,22 @@ int main(int argc, char **argv) {
     while (!log.eof()) {
         std::string filename = std::string(imagesDirPath) + "/" + std::to_string(counter) + ".bmp";
         img.SetFileName(filename.c_str());
-        std::cout << "Generating image: " << filename << std::endl;
 
         char *input;
         log.getline(input, INPUT_MAX_LENGTH);
-        std::cout << input << std::endl;
+
+        if (*input == '\0') {
+            break;
+        }
 
         std::vector<char *> split = tokenize(input, " ");
-        std::cout << split.size() << std::endl;
 
         if (split.size() != ELEMENTS_COUNT) {
             std::cout << "Invalid input: " << input << std::endl;
             continue;
         }
+
+        std::cout << "Generating image: " << filename << std::endl;
         *split[0] == '1'
         ? drawX(img, strtol(split[2], nullptr, 10), strtol(split[3], nullptr, 10))
         : drawO(img, strtol(split[2], nullptr, 10), strtol(split[3], nullptr, 10));
