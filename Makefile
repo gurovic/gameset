@@ -13,6 +13,8 @@ PIPES := $(foreach TARGET,$(filter-out interactor,$(TARGETS)),in_$(TARGET).pipe 
 
 all: $(PIPES) $(TARGETS) $(VISUALIZER)
 
+game: $(PIPES) $(TARGETS)
+
 $(TARGETS): $(patsubst %,$(SRC_DIR)/%.cpp,$(TARGETS)) $(TARGETS_DEPS)
 	$(CXX) $(SRC_DIR)/$@.cpp -o $@ $(CXXFLAGS)
 

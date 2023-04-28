@@ -15,28 +15,47 @@ static const uint16_t          WIDTH      = 1024;
 static const EasyBMP::RGBColor blackColor(0, 0, 0);
 static const EasyBMP::RGBColor whiteColor(255, 255, 255);
 
-// pos_x, pos_y - [0; FIELD_SIZE]
+// pos_x, pos_y - [0; FIELD_SIZE - 1]
 void drawX(EasyBMP::Image &img, const uint8_t pos_x, const uint8_t pos_y,
-           const uint8_t size = 20, const uint8_t thickness = 7,
+           const uint8_t size = 20, const uint8_t thickness = 11,
            const EasyBMP::RGBColor &color = whiteColor) {
-    uint16_t x = WIDTH / FIELD_SIZE * (pos_x - .55);
-    uint16_t y = WIDTH / FIELD_SIZE * (pos_y - .5);
+    uint16_t x = WIDTH / FIELD_SIZE * (pos_x + .5);
+    uint16_t y = WIDTH / FIELD_SIZE * (pos_y + .5);
 
-    for (uint8_t i = 0; i < thickness; ++i) {
+    img.SetPixel(x, y - thickness / 2, whiteColor, false);
+    img.SetPixel(x, y + thickness / 2, whiteColor, false);
+    img.SetPixel(x + thickness / 2, y, whiteColor, false);
+    img.SetPixel(x - thickness / 2, y, whiteColor, false);
+
+    for (uint8_t i = 0; i < thickness / 2; ++i) {
         img.DrawLine(x - size + i, y - size, x + size + i, y + size, color);
         img.DrawLine(x - size + i, y + size, x + size + i, y - size, color);
     }
+    for (uint8_t i = 0; i < thickness / 2; ++i) {
+        img.DrawLine(x - size - i, y - size, x + size - i, y + size, color);
+        img.DrawLine(x - size - i, y + size, x + size - i, y - size, color);
+    }
 }
 
-// pos_x, pos_y - [0; FIELD_SIZE]
+// pos_x, pos_y - [0; FIELD_SIZE - 1]
 void drawO(EasyBMP::Image &img, const uint8_t pos_x, const uint8_t pos_y,
-           const uint8_t r = 20, const uint8_t thickness = 7,
+           const uint8_t r = 22, const uint8_t thickness = 13,
            const EasyBMP::RGBColor &color = whiteColor) {
-    uint16_t x = WIDTH / FIELD_SIZE * (pos_x - .5);
-    uint16_t y = WIDTH / FIELD_SIZE * (pos_y - .5);
+    uint16_t x = WIDTH / FIELD_SIZE * (pos_x + .5);
+    uint16_t y = WIDTH / FIELD_SIZE * (pos_y + .5);
 
-    for (uint8_t i = 0; i < thickness; ++i)
-        img.DrawCircle(x, y, r + i, color);
+    img.DrawCircle(x, y, r, color, true);
+    img.DrawCircle(x, y, r - thickness / 2, blackColor, true);
+
+    img.SetPixel(x, y + r, blackColor);
+    img.SetPixel(x, y - r, blackColor);
+    img.SetPixel(x + r, y, blackColor);
+    img.SetPixel(x - r, y, blackColor);
+
+    img.SetPixel(x, y + r - thickness / 2, whiteColor);
+    img.SetPixel(x, y - r + thickness / 2, whiteColor);
+    img.SetPixel(x + r - thickness / 2, y, whiteColor);
+    img.SetPixel(x - r + thickness / 2, y, whiteColor);
 }
 
 std::vector<char *> tokenize(char *s, const char *delim) {
@@ -76,14 +95,15 @@ int main(int argc, char **argv) {
 
     // Draw the other field lines
     for (uint8_t i = 0; i < FIELD_SIZE; ++i) {
-        int rowPos = std::round(i * (HEIGHT / FIELD_SIZE));
+        // if type is not (unsigned) int, raises segfault (the input var becomes NULL for some reason)
+        unsigned int rowPos = static_cast<uint16_t>(std::round(i * (HEIGHT / FIELD_SIZE)));
         img.DrawLine(0, rowPos, WIDTH, rowPos, whiteColor);
 
-        int colPos = std::round(i * (WIDTH / FIELD_SIZE));
+        auto colPos = static_cast<uint16_t>(std::round(i * (WIDTH / FIELD_SIZE)));
         img.DrawLine(colPos, 0, colPos, HEIGHT, whiteColor);
     }
 
-    std::ifstream log(sourceFilePath, std::ios::in);
+    std::ifstream log(sourceFilePath);
 
     static uint32_t counter = 0;
 
@@ -107,8 +127,8 @@ int main(int argc, char **argv) {
 
         std::cout << "Generating image: " << filename << std::endl;
         *split[0] == '1'
-        ? drawX(img, strtol(split[2], nullptr, 10), strtol(split[3], nullptr, 10))
-        : drawO(img, strtol(split[2], nullptr, 10), strtol(split[3], nullptr, 10));
+        ? drawX(img, strtol(split[3], nullptr, 10), strtol(split[2], nullptr, 10))
+        : drawO(img, strtol(split[3], nullptr, 10), strtol(split[2], nullptr, 10));
 
         img.Write();
         counter++;
