@@ -5,6 +5,7 @@ class MatchReport() {
   var solutionScores: Map[Long, Int] = _
   var PlacesOnly: Boolean = _
 
-  var ErrorCode: Boolean = _
-  var ErrorSolutions: List[Int] = _
+  var executedWithError: Boolean = _
+  var errorSolution: Map[Long, String] = _
+
 }
