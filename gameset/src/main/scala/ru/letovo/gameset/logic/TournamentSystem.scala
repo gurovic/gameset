@@ -10,9 +10,6 @@ trait TournamentSystem {
 }
 
 object TournamentSystemRegistry {
-  val system = Map(
-    1 -> classOf[TournamentSystemRoundRobin],
-//    2 -> classOf[TournamentSystemOlympic]
-  )
+  val system: Seq[Class[_ <: TournamentSystem]] = Seq(classOf[TournamentSystemRoundRobin])
+  //    classOf[TournamentSystemOlympic]
 }
-//    TournamentSystemRegistry.system(1).getConstructor().newInstance() - create new TournamentSystem object
