@@ -1,0 +1,10 @@
+@(games: Map[Int, String]) (implicit session: play.api.mvc.Session)
+@main("Tournaments"){
+    <h2>Tournaments list</h2>
+    <ul>
+    @for(id <- tourname
+        <li> <a href="/tournaments/@id/games/new"> @tournaments(id) </a></li>
+}
+</ul>
+    <a href="/tournaments/new"> New </a>
+}
