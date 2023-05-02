@@ -8,4 +8,7 @@ class MatchReport() {
   var executedWithError: Boolean = _
   var errorSolution: Map[Long, String] = _
 
+  var interactorError: Boolean = _
+  var interactorLog: String = _
+
 }
