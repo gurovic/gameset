@@ -1,6 +1,6 @@
 package ru.letovo.gameset.web.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 import ru.letovo.gameset.logic.{Config, RenderConfig, ViewportSize}
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.Tag
@@ -10,7 +10,7 @@ case class Video(id: Long, renderedAt: Long, config: RenderConfig) {
 }
 
 object Video {
-  implicit val videoFormat = Json.format[Video]
+  implicit val videoFormat: OFormat[Video] = Json.format[Video]
 }
 
 class VideosTable(tag: Tag) extends Table[Video](tag, "videos") {
