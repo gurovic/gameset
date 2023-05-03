@@ -10,7 +10,6 @@ case class Video(id: Long, renderedAt: Long, config: RenderConfig) {
 }
 
 object Video {
-  implicit val videoFormat: OFormat[Video] = Json.format[Video]
 }
 
 class VideosTable(tag: Tag) extends Table[Video](tag, "videos") {
