@@ -4,6 +4,9 @@ import java.util.function.Function
 import scala.collection.mutable.ArrayBuffer
 
 class TournamentSystemRoundRobin extends TournamentSystem with MatchFinishedObserver {
+
+  override val id = 1
+
   private var game: Game = _
   var matchesCompleted = 0
   var matchesNumber = 0

@@ -724,7 +724,7 @@ int main() {
     Table_init();
     //std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
-    std::cerr << "mtdf is " << player << endl;
+//    std::cerr << "mtdf is " << player << endl;
     if (player == -1) {
         while (true) {
             if (set_opponent_move_or_break())

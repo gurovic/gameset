@@ -1,4 +1,4 @@
-FROM gcc:12 AS build
+FROM gcc:latest AS build
 
 WORKDIR /build
 
@@ -15,6 +15,6 @@ ADD ./Makefile /build/Makefile
 #USER runner
 
 RUN make clean
-RUN make
+RUN make game
 
-CMD ["make", "run"]
+CMD ["make", "run-game"]
