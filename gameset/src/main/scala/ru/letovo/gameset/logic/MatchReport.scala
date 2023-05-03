@@ -9,6 +9,6 @@ class MatchReport() {
   var errorSolution: Map[Long, String] = _
 
   var interactorError: Boolean = _
-  var interactorLog: String = _
+  var interactorLogPath: String = _
 
 }
