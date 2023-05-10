@@ -7,7 +7,7 @@ import slick.lifted.{ProvenShape, Tag}
 
 case class MatchReport(matchId: Long,
                        solutionScores: Map[Long, Int],
-                       PlacesOnly: Boolean,
+                       placesOnly: Boolean,
                        errorCode: Boolean,
                        errorSolutionId: Long,
                        errorSolutionLog: String,
