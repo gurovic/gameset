@@ -18,7 +18,7 @@ case class MatchReport(matchId: Long,
 
 class MatchReportsTable(tag: Tag) extends Table[MatchReport](tag, "reports") {
   /** The ID column, which is the primary key, and auto incremented */
-  def matchId = column[Long]("matchid")
+  def matchId = column[Long]("matchid", O.PrimaryKey, O.AutoInc)
 
   def placesOnly = column[Boolean]("placesonly")
 
