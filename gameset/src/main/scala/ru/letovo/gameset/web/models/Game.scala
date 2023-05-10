@@ -26,11 +26,11 @@ class GamesTable(tag: Tag) extends Table[Game](tag, "games") {
   def rules = column[String]("rules")
 
   def author_solutionID = column[Long]("author_solutionID")
-  def author_solution = foreignKey("AUTHOR_SOLUTION", author_solutionID, TableQuery[SolutionsTable])(_.ID)
+  def author_solution = foreignKey("AUTHOR_SOLUTION", author_solutionID, TableQuery[SolutionsTable])(_.id)
 
   def dumb_solutionID = column[Long]("dumb_solutionID")
 
-  def dumb_solution = foreignKey("DUMB_SOLUTION", dumb_solutionID, TableQuery[SolutionsTable])(_.ID)
+  def dumb_solution = foreignKey("DUMB_SOLUTION", dumb_solutionID, TableQuery[SolutionsTable])(_.id)
   def authorID = column[Long]("authorid")
   def author = foreignKey("AUTHOR", authorID, TableQuery[UsersTable])(_.id)
 
