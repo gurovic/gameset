@@ -38,9 +38,11 @@ class MatchReportsTable(tag: Tag) extends Table[MatchReport](tag, "reports") {
 class MatchResutsTable extends Table[MatchReport](tag, "matchresults"){
 
   def * = _
+
+  def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
   def matchId = column[Long]("matchid")
 
-  def solutionId: = column[Long]("solutionId")
+  def solutionId = column[Long]("solutionId")
 
   def solutionScore = column[Int]("solutionScore")
 
