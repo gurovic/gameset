@@ -5,7 +5,7 @@ import ru.letovo.gameset.web.models.Video
 import scala.sys.process.stringSeqToProcess
 
 class Encoder() {
-  def encode(sourcePath: String, matchId: Int, config: RenderConfig): Video = {
+  def encode(sourcePath: String, matchId: Long, config: RenderConfig): Video = {
     Seq("ffmpeg",
       "-r", config.framerate.toString,
       "-f image2",
