@@ -1,0 +1,8 @@
+@import ru.letovo.gameset.web.models.Solution
+@(gameID: Long, solution: Solution)(implicit session: play.api.mvc.Session)
+
+@main("Solution") {
+    <h2>Solution No @solution.id: @solution.name</h2>
+    <a href="/users/@solution.creatorID">Author</a>
+    <a href="/games/@gameID">Game</a>
+}

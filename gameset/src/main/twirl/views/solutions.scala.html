@@ -1,0 +1,12 @@
+@import ru.letovo.gameset.web.models.Solution
+@(gameID: Long, solutions: Seq[Solution])(implicit session: play.api.mvc.Session)
+
+@main("Solutions") {
+    <ul>
+    @for(solution <- solutions) {
+        <li> <a href="/games/@gameID/solutions/@solution.id"> @solutions(solution.id.toInt) </a></li>
+    }
+    </ul>
+
+    <a href="/games/@gameID/solutions/new"> New solution </a>
+}
