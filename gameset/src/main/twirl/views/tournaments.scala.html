@@ -1,10 +1,12 @@
-@(tournaments: Map[Int, String]) (implicit session: play.api.mvc.Session)
-@main("Tournaments"){
-    <h2>Tournaments list</h2>
+@import ru.letovo.gameset.web.models.Tournament
+@(tournaments: Seq[Tournament])(implicit session: play.api.mvc.Session)
+
+@main("Tournaments") {
     <ul>
-    @for(id <- tournaments.keys){
-        <li> <a href="/tournaments/@id/games/new"> @tournaments(id) </a></li>
+    @for(tournament <- tournaments) {
+        <li> <a href="/tournaments/@tournament.id"> @tournaments(tournament.id.toInt) </a></li>
     }
     </ul>
-    <a href="/tournaments/new"> New </a>
+
+    <a href="/tournaments/new"> New solution </a>
 }

@@ -1,0 +1,22 @@
+@(action: Call)(implicit session: play.api.mvc.Session)
+
+@main("Upload tournament") {
+  <form action="@action.url" method="post" enctype="multipart/form-data">
+    <p>
+      Enter a name of the tournament: <input type="text" name="name" />
+    </p>
+    <p>
+      Select a file containing description: <input type="file" name="description" />
+    </p>
+    <p>
+      Enter a name of the game: <input type="text" name="game" />
+    </p>
+    <p>
+      <input type="hidden" name="userID" value="@session.get("userID").get" />
+    </p>
+
+    <p>
+      <input type="submit" value="Upload the tournament" />
+    </p>
+  </form>
+}
