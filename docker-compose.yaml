@@ -1,0 +1,53 @@
+version: "3.9"
+
+services:
+    web:
+        container_name: web
+#        restart: always
+        build:
+            dockerfile: play.dockerfile
+            context: .
+        networks:
+            - default
+        env_file:
+            - .env
+        depends_on:
+            db:
+                condition: service_healthy
+        environment:
+            DATABASE_URI: "jdbc:postgresql://${PGHOST}:${PGPORT}/${PGDATABASE}?user=${PGUSER}&password=${PGPASSWORD}"
+        ports:
+            - "${WEB_IP}:${WEB_PORT}:9000"
+        volumes:
+            - ./data/gameset:/opt/gameset/data
+
+    db:
+        container_name: postgres
+        image: postgres:15.0-bullseye
+        command: >
+            -c ssl=on
+            -c ssl_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+            -c ssl_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+        restart: always
+        ports:
+            - ${PGPORT}:${PGPORT}
+        networks:
+            - default
+        env_file:
+            - .env
+        environment:
+            POSTGRES_DB: ${PGDATABASE}
+            POSTGRES_USER: ${PGUSER}
+            POSTGRES_PASSWORD: ${PGPASSWORD}
+        volumes:
+            - ./db/migrations:/docker-entrypoint-initdb.d
+            - ./db/data:/var/lib/postgresql/data
+            - ./db/logs:/var/log/postgresql
+        healthcheck:
+            test: [ "CMD-SHELL", "pg_isready -U ${PGUSER} -d ${PGDATABASE} -p ${PGPORT} -h localhost" ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+networks:
+    default:
