@@ -1,7 +1,7 @@
 package ru.letovo.gameset.web.controllers
 
 import play.api.mvc._
-import ru.letovo.gameset.web.models.{Solution, SolutionsTable}
+import ru.letovo.gameset.web.models.{SolutionsRepository, SolutionsTable, Solution}
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted
 
@@ -17,12 +17,11 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
 
   val db = Database.forConfig("postgres")
   val solutionsTable = lifted.TableQuery[SolutionsTable]
+  val repo = new SolutionsRepository(db)
 
 
   def listSolutions(gameID: Long) = Action { implicit request =>
-    val solutionsFuture = db.run {
-      solutionsTable.filter(_.gameID === gameID).result
-    }
+    val solutionsFuture = repo.findAllByGameID(gameID)
 
     solutionsFuture.onComplete {
       case Success(solutions) => Ok(views.html.solutions(gameID, solutions))
@@ -37,9 +36,7 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
   }
 
   def viewSolution(gameID: Long, solutionID: Long) = Action { implicit request =>
-    val solutionFuture = db.run {
-      solutionsTable.filter(_.id === solutionID).result
-    }
+    val solutionFuture = repo.findAllByID(solutionID)
 
     solutionFuture.onComplete {
       case Success(solution) =>
@@ -76,20 +73,24 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
 
         val name = request.body.dataParts.get("name").map(_.head).getOrElse(solutionFile.filename)
 
-        val solution = (solutionsTable returning solutionsTable.map(_.id)
-          into ((user, id) => user.copy(id = id))) += Solution(0, gameID, request.id, name)
+        val solutionFuture = repo.newUserSolution(gameID, request.id, name)
 
-        solution.map { s =>
-          val potentialPath = Paths.get(s.path)
+        solutionFuture.onComplete {
+          case Success(s) =>
+            val potentialPath = Paths.get(s.path)
+            if (!potentialPath.toFile.exists()) {
+              Files.createDirectories(potentialPath.getParent)
+              println("Created directory")
+            }
 
-          if (!potentialPath.toFile.exists()) {
-            Files.createDirectories(potentialPath.getParent)
-            println("Created directory")
-          }
+            solutionFile.ref.copyTo(potentialPath, replace = true)
 
-          solutionFile.ref.copyTo(potentialPath, replace = true)
+            Redirect(routes.SolutionsController.viewSolution(gameID, s.id.getOrElse(-10))).flashing("success" -> "File uploaded")
 
-          Redirect(routes.SolutionsController.viewSolution(gameID, s.id)).flashing("success" -> "File uploaded")
+          case Failure(e) =>
+            println("Couldn't create solution")
+            e.printStackTrace()
+            Redirect(routes.HomeController.index()).flashing("error" -> e.toString)
         }
       }
       .getOrElse {
@@ -115,7 +116,7 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
 
       val affectedRowsCount = db.run {
         selectQuery.result.head.map { solution =>
-          selectQuery.update(Solution(solutionID, newGameID.getOrElse(solution.gameID),
+          selectQuery.update(Solution(Some(solutionID), newGameID.getOrElse(solution.gameID),
             newCreatorID.getOrElse(solution.creatorID), newSolutionName.getOrElse(solution.name)))
         }
       }
@@ -137,16 +138,18 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
   }
 
   def deleteSolution(@unused version: Int, @unused gameID: Long, solutionID: Long): Action[AnyContent] = Action { implicit request =>
-    val affectedRowsCount = db.run {
+    /*val affectedRowsCountFuture = db.run {
       val q = for {s <- solutionsTable if s.id === solutionID} yield s
 
       q.exists.result.map { exists =>
         if (exists) q.delete
         else DBIO.failed(new Exception("No such solution"))
       }
-    }
+    }*/
 
-    affectedRowsCount.onComplete {
+    val affectedRowsCountFuture = repo.deleteByID(solutionID)
+
+    affectedRowsCountFuture.onComplete {
       case Success(_) =>
         Redirect(routes.HomeController.index()).flashing("success" -> "Solution deleted")
 
