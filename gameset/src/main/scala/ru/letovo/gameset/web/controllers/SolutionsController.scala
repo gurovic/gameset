@@ -32,7 +32,7 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
         Redirect(routes.HomeController.index()).flashing("error" -> e.toString)
     }
 
-    Ok("")
+    Ok("ok")
   }
 
   def viewSolution(gameID: Long, solutionID: Long) = Action { implicit request =>
@@ -52,7 +52,7 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
         Redirect(routes.HomeController.index()).flashing("error" -> e.toString)
     }
 
-    Ok("")
+    Ok("ok")
   }
 
   def newSolution(gameID: Long) = Action { implicit request =>
@@ -98,7 +98,7 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
         Redirect(routes.HomeController.index()).flashing("error" -> "Missing file")
       }
 
-    Ok("")
+    Ok("ok")
   }
 
   def editSolution(@unused version: Int, gameID: Long, solutionID: Long) = Action { implicit request =>
@@ -134,7 +134,7 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
       Redirect(routes.HomeController.index()).flashing("error" -> "No JSON body")
     }
 
-    Ok("")
+    Ok("ok")
   }
 
   def deleteSolution(@unused version: Int, @unused gameID: Long, solutionID: Long): Action[AnyContent] = Action { implicit request =>
@@ -159,7 +159,7 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
         Redirect(routes.HomeController.index()).flashing("error" -> e.toString)
     }
 
-    Ok("")
+    Ok("ok")
   }
 
 }

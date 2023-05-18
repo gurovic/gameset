@@ -2,18 +2,17 @@ package ru.letovo.gameset.web.models
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
+import org.scalatest.BeforeAndAfter
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.{BeforeAndAfter, OptionValues}
 import org.scalatestplus.mockito.MockitoSugar
-import org.scalatestplus.play._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
 
-class SolutionRepositoryTest extends AnyWordSpec with Matchers with OptionValues with WsScalaTestClient {
+class SolutionRepositoryTest extends AnyWordSpec with Matchers {
   val sampleAuthorSolution: Solution = Solution(Some(-1), 1, 1, "testAuthorSolution")
   val sampleUserSolution: Solution = Solution(Some(10), 1, 1, "testUserSolution")
 
