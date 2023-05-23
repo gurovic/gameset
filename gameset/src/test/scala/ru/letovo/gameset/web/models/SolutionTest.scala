@@ -69,13 +69,13 @@ class SolutionModelTest extends AnyFunSuite with BeforeAndAfter with MockitoSuga
     verify(repo).findAllByID(-1)
   }
 
-  test("findAllByGameID should return solutions with the given game id") {
-    when(repo.findAllByGameID(10)).thenReturn(Future.successful(Seq[Solution](sampleSolution)))
-    repo.findAllByGameID(10).onComplete {
+  test("findAllByTournamentID should return solutions with the given tournament id") {
+    when(repo.findAllByTournamentID(10)).thenReturn(Future.successful(Seq[Solution](sampleSolution)))
+    repo.findAllByTournamentID(10).onComplete {
       case Success(s) => s.head mustBe sampleSolution
       case Failure(e) => fail(e)
     }(ec)
-    verify(repo).findAllByGameID(10)
+    verify(repo).findAllByTournamentID(10)
   }
 
   test("deleteByID should return 1 when the solution is deleted") {

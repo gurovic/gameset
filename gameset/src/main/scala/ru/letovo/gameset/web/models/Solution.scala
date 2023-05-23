@@ -6,13 +6,13 @@ import slick.lifted.Tag
 
 import scala.concurrent.Future
 
-case class Solution(id: Option[Long], gameID: Long, creatorID: Long, name: String) {
+case class Solution(id: Option[Long], tournamentID: Long, creatorID: Long, name: String) {
 
   /**
    * Author's solutions uses (-1) ID
    */
 
-  def path = s"../data/games/$gameID/user-solutions/${id.getOrElse(-10L)}"
+  def path = s"../data/games/$tournamentID/user-solutions/${id.getOrElse(-10L)}"
 
   def isAuthorSolution: Boolean = id.getOrElse(0L) == -1L
 }
@@ -25,12 +25,12 @@ class SolutionsTable(tag: Tag) extends Table[Solution](tag, "solutions") {
    * It defines how the columns are converted to and from the Solution object.
    */
 
-  def * = (id.?, gameID, creatorID, name) <> ((Solution.apply _).tupled, Solution.unapply)
+  def * = (id.?, tournamentID, creatorID, name) <> ((Solution.apply _).tupled, Solution.unapply)
 
   /** The ID column, which is the primary key and auto incremented */
   def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
 
-  def gameID = column[Long]("game_id")
+  def tournamentID = column[Long]("tournament_id")
 
   def creatorID = column[Long]("creator_id")
 
@@ -42,18 +42,18 @@ class SolutionsRepository(db: Database) {
 
   val solutionsTable = lifted.TableQuery[SolutionsTable]
 
-  def newAuthorSolution(gameID: Long, name: String): Future[Solution] = {
+  def newAuthorSolution(tournamentID: Long, name: String): Future[Solution] = {
     val newSolution = (solutionsTable returning solutionsTable.map(_.id)
       into ((user, id) => user.copy(id = Some(id)))
-      ) += Solution(Some(-1), gameID, -1, name)
+      ) += Solution(Some(-1), tournamentID, -1, name)
 
     db.run(newSolution)
   }
 
-  def newUserSolution(gameID: Long, creatorID: Long, name: String): Future[Solution] = {
+  def newUserSolution(tournamentID: Long, creatorID: Long, name: String): Future[Solution] = {
     val newSolution = (solutionsTable returning solutionsTable.map(_.id)
       into ((user, id) => user.copy(id = Some(id)))
-      ) += Solution(None, gameID, creatorID, name)
+      ) += Solution(None, tournamentID, creatorID, name)
 
     db.run(newSolution)
   }
@@ -64,9 +64,9 @@ class SolutionsRepository(db: Database) {
     }
   }
 
-  def findAllByGameID(gameID: Long) = {
+  def findAllByTournamentID(tournamentID: Long) = {
     db.run {
-      solutionsTable.filter(_.gameID === gameID).result
+      solutionsTable.filter(_.tournamentID === tournamentID).result
     }
   }
 
