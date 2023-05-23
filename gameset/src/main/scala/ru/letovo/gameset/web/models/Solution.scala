@@ -1,5 +1,6 @@
 package ru.letovo.gameset.web.models
 
+import ru.letovo.gameset.logic.Config.games_root
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted
 import slick.lifted.Tag
@@ -12,7 +13,7 @@ case class Solution(id: Option[Long], gameID: Long, creatorID: Long, name: Strin
    * Author's solutions uses (-1) ID
    */
 
-  def path = s"../data/games/$gameID/user-solutions/${id.getOrElse(-10L)}"
+  def path = s"..$games_root/$gameID/user-solutions/${id.getOrElse(-10L)}"
 
   def isAuthorSolution: Boolean = id.getOrElse(0L) == -1L
 }

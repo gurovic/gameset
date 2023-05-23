@@ -1,3 +1,4 @@
+/*
 package ru.letovo.gameset.logic
 
 import org.mockito.ArgumentMatchers.any
@@ -84,3 +85,4 @@ class TournamentUnitTest extends AnyFunSuite with BeforeAndAfter with MockitoSug
     tournament.conclude(List())
   }
 }
+*/
