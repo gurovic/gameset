@@ -56,8 +56,7 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
   }
 
   def newSolution(tournamentID: Long) = Action { implicit request =>
-    val tournamentID = request.getQueryString("tournament_id").getOrElse("-10").toLong
-    Ok(views.html.newSolution(tournamentID, routes.SolutionsController.uploadSolution(1, tournamentID)))
+    Ok(views.html.newSolution(routes.SolutionsController.uploadSolution(1, tournamentID)))
   }
 
   def uploadSolution(@unused version: Int, tournamentID: Long) = Action(parse.multipartFormData) { implicit request =>
