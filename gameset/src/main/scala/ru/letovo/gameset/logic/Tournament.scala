@@ -1,5 +1,7 @@
 package ru.letovo.gameset.logic
 
+import ru.letovo.gameset.web.models.Solution
+
 import java.util.{Calendar, Date}
 import scala.collection.mutable.ArrayBuffer
 

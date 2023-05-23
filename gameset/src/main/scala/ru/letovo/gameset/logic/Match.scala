@@ -1,5 +1,7 @@
 package ru.letovo.gameset.logic
 
+import ru.letovo.gameset.web.models.Solution
+
 import java.io.File
 import java.nio.file.{Files, Paths}
 import scala.sys.process.stringSeqToProcess
