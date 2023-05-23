@@ -1,5 +1,6 @@
 package ru.letovo.gameset.logic
 
+import models.Game
 import ru.letovo.gameset.web.models.Solution
 
 import java.io.File
@@ -39,7 +40,7 @@ class Match(private val solutions: List[Solution], private val game: Game) {
     val argv = List.tabulate(invokers.length - 1)(i =>
       invokers(i).stdin.get + ":" + invokers(i).stdout.get
     )
-    val interactor = new Invoker(game.getInteractorPath(), argv)
+    val interactor = new Invoker(game.interactor, argv)
     interactor.stdin = Option(root + "/interactor_in.txt")
     interactor.stdout = Option(root + "/interactor_out.txt")
     invokers(solutions.length) = interactor

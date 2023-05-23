@@ -1,10 +1,12 @@
 package ru.letovo.gameset.logic
 
+import models.Game
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.doNothing
 import org.scalatest.{BeforeAndAfter, PrivateMethodTester}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.mockito.MockitoSugar
+import ru.letovo.gameset.web.models.Solution
 
 import java.util.function.Function
 import scala.collection.mutable.ArrayBuffer
