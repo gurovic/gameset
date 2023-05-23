@@ -4,7 +4,7 @@
 @main("Solutions") {
     <ul>
     @for(solution <- solutions) {
-        <li> <a href="/games/@gameID/solutions/@solution.id"> @solutions(solution.id.toInt) </a></li>
+        <li> <a href="/games/@gameID/solutions/@solution.id"> @solutions(solution.id.getOrElse(-10L).toInt) </a></li>
     }
     </ul>
 
