@@ -1,5 +1,8 @@
 package ru.letovo.gameset.logic
 
+import models.Game
+import ru.letovo.gameset.web.models.Solution
+
 import java.util.function.Function
 import scala.collection.mutable.ArrayBuffer
 
