@@ -1,0 +1,10 @@
+@(games: Seq[Game]) (implicit session: play.api.mvc.Session)
+@main("Games"){
+    <h2>Games list</h2>
+    <ul>
+    @for(game <- games){
+        <li> <a href="/games/@game.id/solutions/new"> @game.name </a></li>
+    }
+    </ul>
+    <a href="/games/new"> New </a>
+}
