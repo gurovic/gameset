@@ -1,4 +1,4 @@
-@(gameID: Long, action: Call)(implicit session: play.api.mvc.Session)
+@(action: Call)(implicit session: play.api.mvc.Session)
 
 @main("Upload solution") {
     <form action="@action.url" method="post" enctype="multipart/form-data">
@@ -9,7 +9,7 @@
             Select a file containing solution: <input type="file" name="solution" />
         </p>
         <p>
-            <input type="hidden" name="userID" value="@session.get("userID").get" />
+            <input type="hidden" name="userID" value="@session.get("user_id").get" />
         </p>
 
         <p>

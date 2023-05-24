@@ -20,11 +20,11 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
   val repo = new SolutionsRepository(db)
 
 
-  def listSolutions(gameID: Long) = Action { implicit request =>
-    val solutionsFuture = repo.findAllByGameID(gameID)
+  def listSolutions(tournamentID: Long) = Action { implicit request =>
+    val solutionsFuture = repo.findAllByTournamentID(tournamentID)
 
     solutionsFuture.onComplete {
-      case Success(solutions) => Ok(views.html.solutions(gameID, solutions))
+      case Success(solutions) => Ok(views.html.solutions(tournamentID, solutions))
 
       case Failure(e) =>
         println("Couldn't obtain solutions")
@@ -35,13 +35,13 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
     Ok("ok")
   }
 
-  def viewSolution(gameID: Long, solutionID: Long) = Action { implicit request =>
+  def viewSolution(tournamentID: Long, solutionID: Long) = Action { implicit request =>
     val solutionFuture = repo.findAllByID(solutionID)
 
     solutionFuture.onComplete {
       case Success(solution) =>
         if (solution.nonEmpty)
-          Ok(views.html.solution(gameID, solution.head))
+          Ok(views.html.solution(tournamentID, solution.head))
 
         println("No such solution")
         Redirect(routes.HomeController.index()).flashing("error" -> "No such solution")
@@ -55,11 +55,11 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
     Ok("ok")
   }
 
-  def newSolution(gameID: Long) = Action { implicit request =>
-    Ok(views.html.newSolution(gameID, routes.SolutionsController.uploadSolution(1, gameID)))
+  def newSolution(tournamentID: Long) = Action { implicit request =>
+    Ok(views.html.newSolution(routes.SolutionsController.uploadSolution(1, tournamentID)))
   }
 
-  def uploadSolution(@unused version: Int, gameID: Long) = Action(parse.multipartFormData) { implicit request =>
+  def uploadSolution(@unused version: Int, tournamentID: Long) = Action(parse.multipartFormData) { implicit request =>
     if (!request.hasBody)
       Redirect(routes.HomeController.index()).flashing("error" -> "No body")
 
@@ -73,7 +73,7 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
 
         val name = request.body.dataParts.get("name").map(_.head).getOrElse(solutionFile.filename)
 
-        val solutionFuture = repo.newUserSolution(gameID, request.id, name)
+        val solutionFuture = repo.newUserSolution(tournamentID, request.id, name)
 
         solutionFuture.onComplete {
           case Success(s) =>
@@ -85,7 +85,7 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
 
             solutionFile.ref.copyTo(potentialPath, replace = true)
 
-            Redirect(routes.SolutionsController.viewSolution(gameID, s.id.getOrElse(-10))).flashing("success" -> "File uploaded")
+            Redirect(routes.SolutionsController.viewSolution(tournamentID, s.id.getOrElse(-10))).flashing("success" -> "File uploaded")
 
           case Failure(e) =>
             println("Couldn't create solution")
@@ -101,13 +101,12 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
     Ok("ok")
   }
 
-  def editSolution(@unused version: Int, gameID: Long, solutionID: Long) = Action { implicit request =>
+  def editSolution(@unused version: Int, tournamentID: Long, solutionID: Long) = Action { implicit request =>
     if (!request.hasBody)
       Redirect(routes.HomeController.index()).flashing("error" -> "No body")
 
     request.body.asJson.map { json =>
-      //      json.validate[Solution]
-
+      // WONTFIX
       val newGameID = (json \ "game_id").asOpt[Long]
       val newCreatorID = (json \ "creator_id").asOpt[Long]
       val newSolutionName = (json \ "name").asOpt[String]
@@ -116,14 +115,14 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
 
       val affectedRowsCount = db.run {
         selectQuery.result.head.map { solution =>
-          selectQuery.update(Solution(Some(solutionID), newGameID.getOrElse(solution.gameID),
+          selectQuery.update(Solution(Some(solutionID), newGameID.getOrElse(solution.tournamentID),
             newCreatorID.getOrElse(solution.creatorID), newSolutionName.getOrElse(solution.name)))
         }
       }
 
       affectedRowsCount.onComplete {
         case Success(_) =>
-          Redirect(routes.SolutionsController.viewSolution(gameID, solutionID)).flashing("success" -> "Solution updated")
+          Redirect(routes.SolutionsController.viewSolution(tournamentID, solutionID)).flashing("success" -> "Solution updated")
         case Failure(e) =>
           println("Couldn't update solution")
           e.printStackTrace()
@@ -137,7 +136,7 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
     Ok("ok")
   }
 
-  def deleteSolution(@unused version: Int, @unused gameID: Long, solutionID: Long): Action[AnyContent] = Action { implicit request =>
+  def deleteSolution(@unused version: Int, @unused tournamentID: Long, solutionID: Long): Action[AnyContent] = Action { implicit request =>
     /*val affectedRowsCountFuture = db.run {
       val q = for {s <- solutionsTable if s.id === solutionID} yield s
 
