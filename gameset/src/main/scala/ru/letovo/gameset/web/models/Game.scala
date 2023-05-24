@@ -1,4 +1,4 @@
-package models
+package ru.letovo.gameset.web.models
 
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.Tag
