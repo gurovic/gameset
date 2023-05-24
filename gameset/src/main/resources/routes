@@ -9,10 +9,14 @@ GET           /                                                        ru.letovo
 GET        /assets/*file        controllers.Assets.versioned(path="/public", file: Asset)
 
 # Solutions
-GET        /games/:gameID/solutions        ru.letovo.gameset.web.controllers.SolutionsController.listSolutions(gameID: Long)
-GET           /games/:gameID/solutions/new                             ru.letovo.gameset.web.controllers.SolutionsController.newSolution(gameID: Long)
-GET           /games/:gameID/solutions/:solutionID                     ru.letovo.gameset.web.controllers.SolutionsController.viewSolution(gameID: Long, solutionID: Long)
+GET        /tournaments/:tournamentID/solutions        ru.letovo.gameset.web.controllers.SolutionsController.listSolutions(tournamentID: Long)
+GET           /tournaments/:tournamentID/solutions/new                 ru.letovo.gameset.web.controllers.SolutionsController.newSolution(tournamentID: Long)
+GET           /tournaments/:tournamentID/solutions/:solutionID         ru.letovo.gameset.web.controllers.SolutionsController.viewSolution(tournamentID: Long, solutionID: Long)
 
 POST          /api/:version/games/:gameID/solutions                    ru.letovo.gameset.web.controllers.SolutionsController.uploadSolution(version: Int, gameID: Long)
 PATCH         /api/:version/games/:gameID/solutions/:solutionID        ru.letovo.gameset.web.controllers.SolutionsController.editSolution(version: Int, gameID: Long, solutionID: Long)
 DELETE        /api/:version/games/:gameID/solutions/:solutionID        ru.letovo.gameset.web.controllers.SolutionsController.deleteSolution(version: Int, gameID: Long, solutionID: Long)
+
+# Tournaments
+GET         /tournaments/new                ru.letovo.gameset.web.controllers.TournamentsController.creationPage()
+POST         /api/v:version/tournaments                ru.letovo.gameset.web.controllers.TournamentsController.createTournament(version: Int)

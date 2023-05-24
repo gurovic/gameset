@@ -1,8 +1,7 @@
 package ru.letovo.gameset.web.models
 
-import models.GamesTable
 import ru.letovo.gameset.logic.{TournamentFinishedObserver, TournamentSystem, TournamentSystemRegistry}
-import ru.letovo.gameset.web.models.{User}
+import ru.letovo.gameset.web.models.{GamesTable, User}
 import play.api.libs.json.Json
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted.Tag

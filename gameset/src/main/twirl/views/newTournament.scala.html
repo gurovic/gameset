@@ -1,0 +1,22 @@
+@(games: Seq[ru.letovo.gameset.web.models.Game])(implicit session: play.api.mvc.Session, request: Request[AnyContent])
+@main("Создать турнир"){
+    <h2>Создать турнир</h2>
+    <form action="/api/v1/tournaments" method="POST">
+        @helper.CSRF.formField
+        <label>
+            Название турнира:
+            <input name="name"/>
+        </label>
+        <br/>
+        <label>
+            Игра:
+            <select name="gameID">
+                @for(game <- games){
+                    <option value="@game.id">@game.name</option>
+                }
+            </select>
+        </label>
+        <br/>
+        <input type="submit" value="Создать!">
+    </form>
+}

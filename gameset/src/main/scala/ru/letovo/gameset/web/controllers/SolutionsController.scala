@@ -1,14 +1,15 @@
 package ru.letovo.gameset.web.controllers
 
 import play.api.mvc._
-import ru.letovo.gameset.web.models.{SolutionsRepository, SolutionsTable, Solution}
+import ru.letovo.gameset.logic.{CompilationReport, Compiler}
+import ru.letovo.gameset.web.models.{Solution, SolutionsRepository, SolutionsTable}
 import slick.jdbc.PostgresProfile.api._
 import slick.lifted
 
 import java.nio.file.{Files, Paths}
 import javax.inject._
 import scala.annotation.unused
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
 class SolutionsController @Inject()(val controllerComponents: ControllerComponents)(implicit ec: ExecutionContext) extends BaseController {
@@ -20,46 +21,47 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
   val repo = new SolutionsRepository(db)
 
 
-  def listSolutions(gameID: Long) = Action { implicit request =>
-    val solutionsFuture = repo.findAllByGameID(gameID)
+  def listSolutions(tournamentID: Long) = Action.async { implicit request =>
+    val solutionsFuture = repo.findAllByTournamentID(tournamentID)
 
-    solutionsFuture.onComplete {
-      case Success(solutions) => Ok(views.html.solutions(gameID, solutions))
-
-      case Failure(e) =>
-        println("Couldn't obtain solutions")
-        e.printStackTrace()
-        Redirect(routes.HomeController.index()).flashing("error" -> e.toString)
+    solutionsFuture map { solutions =>
+      Ok(views.html.solutions(tournamentID, solutions))
     }
 
-    Ok("ok")
   }
 
-  def viewSolution(gameID: Long, solutionID: Long) = Action { implicit request =>
+  def viewSolution(tournamentID: Long, solutionID: Long) = Action.async { implicit request =>
     val solutionFuture = repo.findAllByID(solutionID)
 
-    solutionFuture.onComplete {
-      case Success(solution) =>
-        if (solution.nonEmpty)
-          Ok(views.html.solution(gameID, solution.head))
+    solutionFuture map { solution =>
+      if (solution.nonEmpty)
+        Ok(views.html.solution(tournamentID, solution.head))
 
-        println("No such solution")
-        Redirect(routes.HomeController.index()).flashing("error" -> "No such solution")
-
-      case Failure(e) =>
-        println("Couldn't obtain solution")
-        e.printStackTrace()
-        Redirect(routes.HomeController.index()).flashing("error" -> e.toString)
+      println("No such solution")
+      Redirect(routes.HomeController.index()).flashing("error" -> "No such solution")
     }
 
-    Ok("ok")
   }
 
-  def newSolution(gameID: Long) = Action { implicit request =>
-    Ok(views.html.newSolution(gameID, routes.SolutionsController.uploadSolution(1, gameID)))
+  def newSolution(tournamentID: Long) = Action { implicit request =>
+    Ok(views.html.newSolution(routes.SolutionsController.uploadSolution(1, tournamentID)))
+
   }
 
-  def uploadSolution(@unused version: Int, gameID: Long) = Action(parse.multipartFormData) { implicit request =>
+
+  def onCompilationDone(tournamentID: Long, solutionID: Long) = {
+    (c: CompilationReport) =>
+      Action { implicit request =>
+        if (c.is_successful) {
+          Redirect(routes.SolutionsController.viewSolution(tournamentID, solutionID))
+        }
+
+        Redirect(routes.SolutionsController.newSolution(tournamentID))
+      }
+
+  }
+
+  def uploadSolution(@unused version: Int, tournamentID: Long) = Action.async(parse.multipartFormData) { implicit request =>
     if (!request.hasBody)
       Redirect(routes.HomeController.index()).flashing("error" -> "No body")
 
@@ -73,41 +75,35 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
 
         val name = request.body.dataParts.get("name").map(_.head).getOrElse(solutionFile.filename)
 
-        val solutionFuture = repo.newUserSolution(gameID, request.id, name)
+        val solutionFuture = repo.newUserSolution(tournamentID, request.id, name)
 
-        solutionFuture.onComplete {
-          case Success(s) =>
-            val potentialPath = Paths.get(s.path)
-            if (!potentialPath.toFile.exists()) {
-              Files.createDirectories(potentialPath.getParent)
-              println("Created directory")
-            }
+        solutionFuture map { solution =>
+          val potentialPath = Paths.get(solution.path)
+          if (!potentialPath.toFile.exists()) {
+            Files.createDirectories(potentialPath.getParent)
+            println("Created directory")
+          }
 
-            solutionFile.ref.copyTo(potentialPath, replace = true)
+          solutionFile.ref.copyTo(potentialPath, replace = true)
 
-            Redirect(routes.SolutionsController.viewSolution(gameID, s.id.getOrElse(-10))).flashing("success" -> "File uploaded")
+          new Compiler().compile(potentialPath.toString, onCompilationDone(tournamentID, solution.id.getOrElse(-10)))
 
-          case Failure(e) =>
-            println("Couldn't create solution")
-            e.printStackTrace()
-            Redirect(routes.HomeController.index()).flashing("error" -> e.toString)
+          Redirect(routes.SolutionsController.viewSolution(tournamentID, solution.id.getOrElse(-10))).flashing("success" -> "Compiling")
         }
+
       }
       .getOrElse {
         println("No file uploaded")
-        Redirect(routes.HomeController.index()).flashing("error" -> "Missing file")
+        Future(Redirect(routes.HomeController.index()).flashing("error" -> "Missing file"))
       }
 
-    Ok("ok")
   }
 
-  def editSolution(@unused version: Int, gameID: Long, solutionID: Long) = Action { implicit request =>
+  @deprecated def editSolution(@unused version: Int, tournamentID: Long, solutionID: Long) = Action { implicit request =>
     if (!request.hasBody)
       Redirect(routes.HomeController.index()).flashing("error" -> "No body")
 
     request.body.asJson.map { json =>
-      //      json.validate[Solution]
-
       val newGameID = (json \ "game_id").asOpt[Long]
       val newCreatorID = (json \ "creator_id").asOpt[Long]
       val newSolutionName = (json \ "name").asOpt[String]
@@ -116,19 +112,20 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
 
       val affectedRowsCount = db.run {
         selectQuery.result.head.map { solution =>
-          selectQuery.update(Solution(Some(solutionID), newGameID.getOrElse(solution.gameID),
+          selectQuery.update(Solution(Some(solutionID), newGameID.getOrElse(solution.tournamentID),
             newCreatorID.getOrElse(solution.creatorID), newSolutionName.getOrElse(solution.name)))
         }
       }
 
       affectedRowsCount.onComplete {
         case Success(_) =>
-          Redirect(routes.SolutionsController.viewSolution(gameID, solutionID)).flashing("success" -> "Solution updated")
+          Redirect(routes.SolutionsController.viewSolution(tournamentID, solutionID)).flashing("success" -> "Solution updated")
         case Failure(e) =>
           println("Couldn't update solution")
           e.printStackTrace()
           Redirect(routes.HomeController.index()).flashing("error" -> e.toString)
       }
+
     }.getOrElse {
       println("No JSON body")
       Redirect(routes.HomeController.index()).flashing("error" -> "No JSON body")
@@ -137,7 +134,7 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
     Ok("ok")
   }
 
-  def deleteSolution(@unused version: Int, @unused gameID: Long, solutionID: Long): Action[AnyContent] = Action { implicit request =>
+  def deleteSolution(@unused version: Int, @unused tournamentID: Long, solutionID: Long) = Action.async { implicit request =>
     /*val affectedRowsCountFuture = db.run {
       val q = for {s <- solutionsTable if s.id === solutionID} yield s
 
@@ -149,17 +146,10 @@ class SolutionsController @Inject()(val controllerComponents: ControllerComponen
 
     val affectedRowsCountFuture = repo.deleteByID(solutionID)
 
-    affectedRowsCountFuture.onComplete {
-      case Success(_) =>
-        Redirect(routes.HomeController.index()).flashing("success" -> "Solution deleted")
-
-      case Failure(e) =>
-        println("Couldn't delete solution")
-        e.printStackTrace()
-        Redirect(routes.HomeController.index()).flashing("error" -> e.toString)
+    affectedRowsCountFuture map { _ =>
+      Redirect(routes.HomeController.index()).flashing("success" -> "Solution deleted")
     }
 
-    Ok("ok")
   }
 
 }
