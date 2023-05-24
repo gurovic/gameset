@@ -16,3 +16,7 @@ GET           /tournaments/:tournamentID/solutions/:solutionID         ru.letovo
 POST          /api/:version/games/:gameID/solutions                    ru.letovo.gameset.web.controllers.SolutionsController.uploadSolution(version: Int, gameID: Long)
 PATCH         /api/:version/games/:gameID/solutions/:solutionID        ru.letovo.gameset.web.controllers.SolutionsController.editSolution(version: Int, gameID: Long, solutionID: Long)
 DELETE        /api/:version/games/:gameID/solutions/:solutionID        ru.letovo.gameset.web.controllers.SolutionsController.deleteSolution(version: Int, gameID: Long, solutionID: Long)
+
+# Tournaments
+GET         /tournaments/new                ru.letovo.gameset.web.controllers.TournamentsController.creationPage()
+POST         /api/v:version/tournaments                ru.letovo.gameset.web.controllers.TournamentsController.createTournament(version: Int)
