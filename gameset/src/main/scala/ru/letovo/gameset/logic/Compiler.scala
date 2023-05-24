@@ -6,9 +6,9 @@ import java.nio.file.{Files, Paths}
 
 class Compiler {
   var objPath = ""
-  var observer = (compilationReport: CompilationReport) => compilationReport
+  var observer: (CompilationReport) => Any = (c: CompilationReport) => _
 
-  def compile(path: String, observer: (CompilationReport) => CompilationReport): Unit = {
+  def compile(path: String, observer: (CompilationReport) => Any): Unit = {
     this.observer = observer
     objPath = path.split(".").head
 
