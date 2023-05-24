@@ -1,0 +1,7 @@
+@import ru.letovo.gameset.web.models.User
+@(id : Long, user : Seq[ru.letovo.gameset.web.models.User])(implicit session: play.api.mvc.Session)
+
+@main("User") {
+    <h1>User @(id)</h1>
+
+}
