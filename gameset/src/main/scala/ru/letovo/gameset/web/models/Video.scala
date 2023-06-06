@@ -1,9 +1,11 @@
 package ru.letovo.gameset.web.models
 
-import play.api.libs.json.{Json, OFormat}
 import ru.letovo.gameset.logic.{Config, RenderConfig, ViewportSize}
 import slick.jdbc.PostgresProfile.api._
+import slick.lifted
 import slick.lifted.Tag
+
+import scala.concurrent.Future
 
 case class Video(id: Long, renderedAt: Long, config: RenderConfig) {
   def path: String = Config.videos_root + s"/$id"
@@ -55,3 +57,15 @@ class VideosTable(tag: Tag) extends Table[Video](tag, "videos") {
   def compression: Rep[Int] = column[Int]("compression")
 }
 
+class VideoDAO(db: Database) {
+
+  val videoTable = lifted.TableQuery[VideosTable]
+
+  def save(video: Video): Future[Video] = db.run {
+    videoTable returning videoTable += video
+  }
+
+  def findByID(id: Long): Future[Video] = db.run {
+    videoTable.filter(_.id === id).result.head
+  }
+}
